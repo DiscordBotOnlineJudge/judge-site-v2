@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Creating an account</h2>
+    <strong>Linking your Discord account:</strong>
+    <p>
+        If you don't already have an account, go to a direct message or secure private channel with the judge bot (<code>Judge#5642</code>) and type <code>-register</code> (HYPHEN register). The judge will provide you with a unique password associated with your Discord tag. Do not share the password with anyone!
+    </p>
+
+    <p>
+        If you forgot your password, contact <code>jiminycricket#2701</code> to reset your account.
+    </p>
+
+    <small class="text-muted">
+        Linked your account already? <a class="ml-2" href="{{ url_for('login') }}">Log in here</a>
+    </small>
+{% endblock content %}

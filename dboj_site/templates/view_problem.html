@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
+
+    <h2>Problem Statement for <code>{{problemName}}</code></h2>
+
+    <p class="markdown-body" id="content">
+    {{src}}
+    </p>
+
+    <script>
+        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replace("â‰¤", "≤").replace("â‰¤", "≤").replace("â‰¤", "≤").replace("â‰¤", "≤").replace("â‰¤", "≤")).replace("&amp;lt;", "<")
+    </script>
+
+{% endblock content %}

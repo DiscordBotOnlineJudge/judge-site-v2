@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(1) {
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h2>Problems</h2>
+        <table>
+            <tr>
+                <td>Problem name</td>
+                <td>Points</td>
+            </tr>
+
+            {% for problem in problems %}
+            <tr>
+                <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+                <th>{{problem[1]}}</th>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+</html>
+
+{% endblock content %}
