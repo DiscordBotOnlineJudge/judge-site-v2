@@ -172,6 +172,8 @@ def submit(problemName):
 @login_required
 def submission(sub_id):
     sub = settings.find_one({"type":"submission", "id":sub_id})
-    if not sub or sub['author'] != current_user.name:
+    if not sub:
+        abort(404)
+    elif sub['author'] != current_user.name:
         abort(403)
     return render_template('submission.html', sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
