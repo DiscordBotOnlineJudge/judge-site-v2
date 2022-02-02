@@ -6,35 +6,42 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ legend }}</legend>
             <div class="form-group">
-                {{ form.title.label(class="form-control-label") }}
-                {% if form.title.errors %}
-                    {{ form.title(class="form-control form-control-lg is-invalid") }}
+                {{ form.lang.label(class="form-control-label") }}
+                {% if form.lang.errors %}
+                    {{ form.lang(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.title.errors %}
+                        {% for error in form.lang.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.title(class="form-control form-control-lg") }}
+                    {{ form.lang(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.content.label(class="form-control-label") }}
-                {% if form.content.errors %}
-                    {{ form.content(class="form-control form-control-lg is-invalid") }}
+                {{ form.src.label(class="form-control-label") }}
+                {% if form.src.errors %}
+                    {{ form.src(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.content.errors %}
+                        {% for error in form.src.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="form-control form-control-lg") }}
+                    {{ form.src(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>
         <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+            {{ form.submit(class="btn btn-outline-info", id="btn1", onclick="changeButton") }}
         </div>
     </form>
 </div>
+
+<script>
+    var changeButton = function() {
+        document.getElementById("btn1").innerHTML = "Preparing to submit..."
+    };
+</script>
+
 {% endblock content %}

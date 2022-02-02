@@ -41,5 +41,6 @@ class PostForm(FlaskForm):
 
 
 class SubmitForm(FlaskForm):
-    language = SelectField('Language', choices = [x['name'] for x in settings.find({"type":"lang"})])
+    lang = SelectField('Language', choices = [x['name'] for x in settings.find({"type":"lang"})])
     src = TextAreaField('Source code', validators=[DataRequired()])
+    submit = SubmitField('Submit!')

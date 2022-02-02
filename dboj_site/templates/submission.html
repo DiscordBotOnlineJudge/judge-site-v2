@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %} 
+    <legend class="border-bottom mb-4">Execution Results</legend>
+    <p>
+        <a href="{{ url_for('submission', sub_id=sub_id) }}">Reload</a> the page to see latest submission status
+    </p>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style type="text/css">
+        <!--
+         .tab { margin-left: 40px; }
+        -->
+    </style>
+
+    {% if output %}
+        <p class="markdown-body" class="tab" id="content" style="font-family:'Courier New'; font-size:16px">
+        {{output}}
+        </p>
+    {% else %}
+    <strong>Waiting for response from a judging server...</strong>
+    {% endif %}
+
+    <script>
+        document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replaceAll("%nl%", "<br>").replaceAll("      ", "&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;")
+    </script>
+
+{% endblock content %}

@@ -10,6 +10,7 @@ from functools import cmp_to_key
 from flaskext.markdown import Markdown
 from dboj_site.judge import *
 from dboj_site.extras import *
+from multiprocessing import Process, Manager
 md = Markdown(app,
               safe_mode=True,
               output_format='html4',
@@ -77,7 +78,7 @@ def problems():
 @app.route("/viewproblem/<string:problemName>", methods=['GET', 'POST'])
 def viewProblem(problemName):
     problem = settings.find_one({"type":"problem", "name":problemName})
-    if problem is None or (not problem['published'] and not current_user.is_authenticated) or (perms(problem, current_user.name)):
+    if problem is None or (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
         return render_template('404.html'), 404
     storage_client = storage.Client()
     storage_client.get_bucket("discord-bot-oj-file-storage").get_blob("ProblemStatements/" + problemName + ".txt").download_to_filename("statement.md")
@@ -144,10 +145,29 @@ def submit(problemName):
     if form.validate_on_submit():
         sub_cnt = settings.find_one({"type":"sub_cnt"})['cnt']
         settings.update_one({"type":"sub_cnt"}, {"$inc":{"cnt":1}})
-        settings.insert_one({"type":"post", "title":form.title.data, "content":form.content.data, "author":current_user.name, "id":sub_cnt})
-
         
+        lang = form.lang.data
+        src = form.src.data
+        settings.insert_one({"type":"submission", "author":current_user.name, "message":src, "id":sub_cnt, "output":""})        
 
-        return redirect(url_for('/submission/' + str(sub_cnt)))
+        judges = settings.find_one({"type":"judge", "status":0})
+        if judges is None:
+            flash("All of the judge's grading servers are currently offline or in use. Please resubmit in a few seconds.", "danger")
+            return
+
+        manager = Manager()
+        return_dict = manager.dict()
+        rpc = Process(target = runSubmission, args = (judges, current_user.name, src, lang, problemName, False, return_dict, sub_cnt,))
+        rpc.start()
+
+        return redirect('/submission/' + str(sub_cnt))
     return render_template('submit.html', title='Submit to ' + problemName,
                         form=form, legend='Submit to ' + problemName, user = current_user)
+
+@app.route("/submission/<int:sub_id>")
+@login_required
+def submission(sub_id):
+    sub = settings.find_one({"type":"submission", "id":sub_id})
+    if not sub or sub['author'] != current_user.name:
+        abort(403)
+    return render_template('submission.html', sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
