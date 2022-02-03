@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_codemirror import CodeMirror
 
 # Databases and Storage
 from pymongo import MongoClient
@@ -9,6 +10,11 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '9791627cffb23ce1d67adcde28dbf2e6'
+
+# Codemirror for Flask
+CODEMIRROR_LANGUAGES = ['python']
+app.config.from_object(__name__)
+codemirror = CodeMirror(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
+from flask_codemirror.fields import CodeMirrorField
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms import *
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
@@ -42,5 +43,5 @@ class PostForm(FlaskForm):
 
 class SubmitForm(FlaskForm):
     lang = SelectField('Language', choices = [x['name'] for x in settings.find({"type":"lang"})])
-    src = TextAreaField('Source code', validators=[DataRequired()])
+    src = CodeMirrorField('Source code', config={'lineNumbers' : 'true'})
     submit = SubmitField('Submit!')

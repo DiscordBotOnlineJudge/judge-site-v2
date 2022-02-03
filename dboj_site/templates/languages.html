@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(1) {
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <legend class="border-bottom mb-4">Language Runtime Executions</legend>
+        <table>
+            <tr>
+                <td>Language</td>
+                <td>Compilation</td>
+                <td>Execution</td>
+            </tr>
+
+            {% for lang in langs %}
+            <tr>
+                <th>{{lang[0]}}</th>
+                <th>
+                    {% if lang[1] %}
+                        <code>{{lang[1]}}</code>
+                    {% else %}
+                        Not a compiled language
+                    {% endif %}
+                </th>
+                <th><code>{{lang[2]}}</code></th>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+</html>
+
+{% endblock content %}

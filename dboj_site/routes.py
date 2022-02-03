@@ -73,6 +73,9 @@ def page_not_found(e):
 def error_occurred(e):
     return render_template('500.html'), 500
 
+@app.route("/languages")
+def languages():
+    return render_template('languages.html', langs = [(x['name'], x['compl'], x['run']) for x in settings.find({"type":"lang"})])
 
 @app.route("/problems")
 def problems():
