@@ -92,6 +92,9 @@ def viewProblem(problemName):
     src = open("statement.md", "r").read()
     return render_template('view_problem.html', problemName=problemName, src = ("\n" + src))
 
+@app.route("/contests")
+def view_contests():
+    return render_template('contests.html')
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
