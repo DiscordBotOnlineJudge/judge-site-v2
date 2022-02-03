@@ -30,7 +30,7 @@ class User:
         return f"User('{self.username}')"
 
     def get_user(id):
-        return User(settings.find_one({"type":"account", id:id})['name'])
+        return User(settings.find_one({"type":"account", "id":id})['name'])
 
 
 """class Post(db.Model):
