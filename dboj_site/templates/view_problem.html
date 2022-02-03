@@ -9,7 +9,7 @@
     </p>
 
     <script>
-        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replaceAll("â‰¤", "≤")).replaceAll("&amp;lt;", "<")
+        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replaceAll("â‰¤", "≤")).replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">")
     </script>
 
 {% endblock content %}
