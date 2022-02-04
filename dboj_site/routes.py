@@ -11,6 +11,7 @@ from flaskext.markdown import Markdown
 from dboj_site.judge import *
 from dboj_site.extras import *
 from multiprocessing import Process, Manager
+from werkzeug.utils import secure_filename
 md = Markdown(app,
               safe_mode=True,
               output_format='html4',
@@ -73,7 +74,7 @@ def page_not_found(e):
 def error_occurred(e):
     return render_template('500.html'), 500
 
-@app.route("/languages")
+@app.route("/about/languages")
 def languages():
     return render_template('languages.html', langs = [(x['name'], x['compl'], x['run']) for x in settings.find({"type":"lang"})])
 
@@ -183,3 +184,31 @@ def submission(sub_id):
     elif sub['author'] != current_user.name:
         abort(403)
     return render_template('submission.html', finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
+
+@app.route('/export', methods=['GET', 'POST'])
+def upload_file():
+    abort(404)
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part', 'danger')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file', 'danger')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(filename)
+            return redirect(url_for('download_file', name=filename))
+    return render_template('export.html')
+
+
+@app.route("/about/problem-setting")
+def problem_setting_documentation():
+    return render_template('problem-setting.html')

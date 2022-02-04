@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+<legend class="border-bottom mb-4">Setting a problem on the judge</legend>
+
+To set a problem on the judge, first ask me (<code>jiminycricket#2701</code>) to provide you with problem setting permissions (previous admins should already have the permissions).
+<br><br>
+<strong>On the website:</strong> Click the "Upload problem data" button above (under "Problem setting") and upload the zip file problem contents (format described below). Make sure to log in with your personal admin account. <em>If the upload progress bar gets stuck at 100% with no response, please reload the page and try again. It should work the second time.</em>
+<br><br>
+<strong>On the discord bot</strong> (has an 8 MB upload size limit):
+Open a direct message channel with the judge bot (<code>Judge#5642</code>) or a secure private channel with the judge and upload a zip file with the problem data contents, along with the comment <code>-export</code> (HYPHEN export).
+<br><br>
+<strong>The zip file contents should contain the following files:</strong>
+<ol>
+<li> A <code>params.yaml</code> file containing the following information: <br><br>
+<code style="color:#3b48ff">
+name: problemName<br>
+authors: [author1, author2, ... , tester1, tester2, ...]<br>
+difficulty: numberOfPoints<br>
+types: [problemType1, problemType2, ...] # (e.g. "Implementation", "Graph Theory")<br>
+time-limit:<br>
+&emsp;&emsp;&emsp;general: [-> General time limit]<br>
+&emsp;&emsp;&emsp;java: [-> Language-specific time limits (optional)]<br>
+&emsp;&emsp;&emsp;python: ... <br>
+&emsp;&emsp;&emsp;# ... (State time limits in seconds)<br>
+memory-limit:<br>
+&emsp;&emsp;&emsp;general: [-> General memory limit]<br>
+&emsp;&emsp;&emsp;java: [-> Language-specific memory limits (optional)]<br>
+&emsp;&emsp;&emsp;# ... (State memory limits in Kilo-Bytes (KB); 1024 KB = 1 MB)<br>
+batches: [casesInBatch1, casesInBatch2, ...]<br>
+points: [pointsForBatch1, pointsForBatch2, ...]<br>
+private: # 1 for true, 0 for false<br>
+contest: contestName  # [should only be set if "private" is true]<br>
+</code>
+<br>
+</li>
+
+<li>A problem statement description contained in the file <code>description.md</code>. You may write the statement using Discord message markdown. Bold, italics, code segments, and hyperlinks will be picked up.</li>
+<li>Testdata: Every test data file will start with <code>data</code>, followed by the batch number, followed by a <code>.</code> (period), followed by the case number, followed by either <code>.in</code> for an input file or <code>.out</code> for an output file. For example, <code>data3.2.out</code> is the output file for batch 3 case 2 of the testdata.</li>
+</ol>
+
+Please do <strong>not</strong> zip a folder containing these files; <strong>directly zip the file contents only</strong>.
+After you upload the problem data, only you will be able to re-upload and modify the problem contents.
+<br><br>
+<strong>Sample problem data zip file</strong>: <a href="https://drive.google.com/uc?export=download&id=1HjHx6Z7TUCvAQ6ymqF6n-_3TYIgAgngp">problem.zip</a>
+<br><br>
+<h2> Hosting a Contest on the Judge </h2>
+To host a contest:
+<ol>
+<li>Make the contest problems (problem names should end with the associated problem number in the contest. For example, problem 3 of a contest could be named <code>xxxp3</code>)</li>
+<li>Register the contest using the "Set up a new contest" button above (under "Problem/contest setting")</li>
+<li>Use the <code>-set [contest1] [contest2]...</code> command to set up live scoreboards.</li>
+<li>Ask me for permissions to send an announcement in the discord server and/or post the announcement <a href="https://dboj.jimmyliu.dev/post/new">on the website</a>.</li>
+</ol>
+<h2> Custom Checkers </h2>
+To feature custom grading in your problem, add a <code>checker.py</code> python program in the folder with the testdata. This program needs to read the current case input data from the file <code>data.in</code> and read the output provided by the user's program from <code>data.out</code> after processing this information, if you deem the output as correct, print <code>AC</code> to the standard output stream. Otherwise, if it is incorrect, you don't need to print anything. If the judge encounters a runtime-error while running the checker program, it will give a <code>Wrong Answer</code> verdict for the test case. If you use a custom checker, you do not need to include output files in your test data; just input files is sufficient. If you do include <code>.out</code> data, you can read it from <code>expected.out</code>.
+
+For an example of custom checkers, see problem <code>ec4p2</code>.
+{% endblock content %}

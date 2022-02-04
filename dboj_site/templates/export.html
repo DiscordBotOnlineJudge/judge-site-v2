@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+    <legend class="border-bottom mb-4">Export Problem Data</legend>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+    </form>
+{% endblock content %}
