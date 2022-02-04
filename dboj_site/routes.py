@@ -159,7 +159,7 @@ def submit(problemName):
         
         lang = form.lang.data
         src = form.src.data
-        settings.insert_one({"type":"submission", "author":current_user.name, "message":src, "id":sub_cnt, "output":""})        
+        settings.insert_one({"type":"submission", "problem":problemName, "author":current_user.name, "message":src, "id":sub_cnt, "output":""})        
 
         judges = settings.find_one({"type":"judge", "status":0})
         if judges is None:
@@ -183,7 +183,7 @@ def submission(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('submission.html', finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
+    return render_template('submission.html', sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']

@@ -88,6 +88,17 @@
               <form action="/viewproblem/{{problemName}}/submit">
                 <input type="submit" class="btn btn-primary" value="Submit Solution" />
               </form>
+              <br><br>
+              <a href="/viewproblem/{{problemName}}/submissions/{{current_user.name}}">My Submissions</a>
+            </div>
+          </div>
+        {% elif sub_problem %}
+          <div class="col-md-4">
+            <div class="content-section">
+              <h3>{{side_title}}</h3>
+              <a href="/viewproblem/{{sub_problem}}" style="font-size:20px">Back to {{sub_problem}}</a>
+              <br><br>
+              <a href="/submission/{{sub_id}}/src">View source</a>
             </div>
           </div>
         {% endif %}
