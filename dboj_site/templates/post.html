@@ -12,7 +12,11 @@
         {% endif %}
       </div>
       <h2 class="article-title">{{ post['title'] }}</h2>
-      <p class="article-content">{{ post['content'] }}</p>
+      <p class="article-content" id="content">{{ post['content'] }}</p>
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+      <script>
+        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML)
+      </script>
     </div>
   </article>
   <!-- Modal -->
