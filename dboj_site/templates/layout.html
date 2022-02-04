@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <style>
       .navbar-custom {
           background-color: lightgreen;
@@ -34,7 +35,15 @@
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              <div class="btn-group">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/languages">Languages</a>
+                  <a class="dropdown-item" href="https://discord.gg/mhJbxatSpS">Official Discord Server</a>
+                  <a class="dropdown-item" href="https://discord.com/api/oauth2/authorize?client_id=831963122448203776&permissions=2148005952&scope=bot">Bot Invite Link</a>
+                  <a class="dropdown-item" href="https://github.com/DiscordBotOnlineJudge">Github</a>
+                </div>
+              </div>
               <a class="nav-item nav-link" href="{{ url_for('problems') }}">Problems</a>
               <a class="nav-item nav-link" href="/contests">Contests</a>
             </div>
