@@ -21,17 +21,17 @@ md = Markdown(app,
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', posts=[x for x in settings.find({"type":"post"})])
+    return render_template('home.html', title="Home", posts=[x for x in settings.find({"type":"post"})])
 
 
 @app.route("/about")
 def about():
-    return render_template('about.html', legend = "About Discord Bot Online Judge", title='About DBOJ')
+    return render_template('about.html', title="About", legend = "About Discord Bot Online Judge", title='About DBOJ')
 
 
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    return render_template("register.html", title="Register")
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check your password. To create an account, use the "-register" command on the Discord bot', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login.html', title='Log In', form=form)
 
 
 @app.route("/logout")
@@ -63,20 +63,20 @@ def logout():
 
 @app.errorhandler(403)
 def error_occurred(e):
-    return render_template('403.html'), 403
+    return render_template('403.html', title="403 Forbidden"), 403
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('404.html', title="404 Not Found"), 404
 
 
 @app.errorhandler(500)
 def error_occurred(e):
-    return render_template('500.html'), 500
+    return render_template('500.html', title="500 Something Went Wrong"), 500
 
 @app.route("/about/languages")
 def languages():
-    return render_template('languages.html', langs = [(x['name'], x['compl'], x['run']) for x in settings.find({"type":"lang"})])
+    return render_template('languages.html', title="Languages", langs = [(x['name'], x['compl'], x['run']) for x in settings.find({"type":"lang"})])
 
 @app.route("/problems")
 def problems():
@@ -91,11 +91,11 @@ def viewProblem(problemName):
     storage_client = storage.Client()
     storage_client.get_bucket("discord-bot-oj-file-storage").get_blob("ProblemStatements/" + problemName + ".txt").download_to_filename("statement.md")
     src = open("statement.md", "r").read()
-    return render_template('view_problem.html', problemName=problemName, src = ("\n" + src))
+    return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, src = ("\n" + src))
 
 @app.route("/contests")
 def view_contests():
-    return render_template('contests.html')
+    return render_template('contests.html', title="Contests")
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
@@ -112,7 +112,7 @@ def new_post():
         return render_template('create_post.html', title='New Site Announcement',
                             form=form, legend='New Site Announcement', user = current_user)
     else:
-        return render_template('404.html'), 404
+        abort(404)
 
 
 @app.route("/post/<int:post_id>")
@@ -135,7 +135,7 @@ def update_post(post_id):
     elif request.method == 'GET':
         form.title.data = post['title']
         form.content.data = post['content']
-    return render_template('create_post.html', title='Update Post',
+    return render_template('create_post.html', title='Update Announcement ' + str(post_id),
                            form=form, legend='Update Post')
 
 
@@ -213,11 +213,11 @@ def submission(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('submission.html', sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
+    return render_template('submission.html', title="Submission " + str(sub_id), sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
 
 @app.route("/viewproblem/<string:problemName>/submissions/<string:user>")
 def submission_page(problemName, user):
-    return render_template('submission-page.html', problemName = problemName, user = user)
+    return render_template('submission-page.html', title="Submissions for " + problemName + " by " + user, problemName = problemName, user = user)
 
 @app.route("/submission/<int:sub_id>/source")
 @login_required
@@ -227,7 +227,7 @@ def view_source(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('view_source.html', sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace(" ", "%sp%"), author=sub['author'])
+    return render_template('view_source.html', title="View source from " + str(sub_id), sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace(" ", "%sp%"), author=sub['author'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
@@ -250,9 +250,9 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(filename)
             return redirect(url_for('download_file', name=filename))
-    return render_template('export.html')
+    return render_template('export.html', title="Export problem data")
 
 
 @app.route("/about/problem-setting")
 def problem_setting_documentation():
-    return render_template('problem-setting.html')
+    return render_template('problem-setting.html', title="Problem Setting Documentation")
