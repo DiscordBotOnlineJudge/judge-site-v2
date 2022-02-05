@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}   
+    <legend class="border-bottom mb-4">Submission for <a href="/viewproblem/{{sub_problem}}">{{sub_problem}}</a> by {{author}}</legend>
+
+    <code style="color:#3b48ff">
+    {{src}}
+    </code>
+
+{% endblock content %}

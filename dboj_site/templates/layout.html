@@ -97,8 +97,10 @@
             <div class="content-section">
               <h3>{{side_title}}</h3>
               <a href="/viewproblem/{{sub_problem}}" style="font-size:20px">Back to {{sub_problem}}</a>
+              {% if sub_id %}
               <br><br>
-              <a href="/submission/{{sub_id}}/src">View source</a>
+              <a href="/submission/{{sub_id}}/source">View source</a>
+              {% endif %}
             </div>
           </div>
         {% endif %}

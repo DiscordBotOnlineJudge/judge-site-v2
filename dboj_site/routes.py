@@ -175,6 +175,36 @@ def submit(problemName):
     return render_template('submit.html', title='Submit to ' + problemName,
                         form=form, legend='Submit to ' + problemName, user = current_user, sub_problem=problemName)
 
+"""@app.route("")
+def resubmit():
+    form = SubmitForm()
+    if form.validate_on_submit():
+        sub_cnt = settings.find_one({"type":"sub_cnt"})['cnt']
+        settings.update_one({"type":"sub_cnt"}, {"$inc":{"cnt":1}})
+        
+        lang = form.lang.data
+        src = form.src.data
+        settings.insert_one({"type":"submission", "problem":problemName, "author":current_user.name, "message":src, "id":sub_cnt, "output":""})        
+
+        judges = settings.find_one({"type":"judge", "status":0})
+        if judges is None:
+            flash("All of the judge's grading servers are currently offline or in use. Please resubmit in a few seconds.", "danger")
+            return
+
+        manager = Manager()
+        return_dict = manager.dict()
+        rpc = Process(target = runSubmission, args = (judges, current_user.name, src, lang, problemName, False, return_dict, sub_cnt,))
+        rpc.start()
+
+        return redirect('/submission/' + str(sub_cnt))
+    elif request.method == 'GET':
+
+        form.lang.data = post['title']
+        form.src.data = post['content']
+    return render_template('submit.html', title='Submit to ' + problemName,
+                        form=form, legend='Submit to ' + problemName, user = current_user, sub_problem=problemName)"""
+    
+
 @app.route("/submission/<int:sub_id>")
 @login_required
 def submission(sub_id):
@@ -184,6 +214,16 @@ def submission(sub_id):
     elif sub['author'] != current_user.name:
         abort(403)
     return render_template('submission.html', sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
+
+@app.route("/submission/<int:sub_id>/source")
+@login_required
+def view_source(sub_id):
+    sub = settings.find_one({"type":"submission", "id":sub_id})
+    if not sub:
+        abort(404)
+    elif sub['author'] != current_user.name:
+        abort(403)
+    return render_template('view_source.html', sub_problem=sub['problem'], src=sub['message'], author=sub['author'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
