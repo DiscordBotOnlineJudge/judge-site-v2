@@ -26,7 +26,7 @@ def home():
 
 @app.route("/about")
 def about():
-    return render_template('about.html', title="About", legend = "About Discord Bot Online Judge", title='About DBOJ')
+    return render_template('about.html', legend = "About Discord Bot Online Judge", title='About DBOJ')
 
 
 @app.route("/register")
