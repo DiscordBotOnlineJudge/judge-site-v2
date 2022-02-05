@@ -173,7 +173,7 @@ def submit(problemName):
 
         return redirect('/submission/' + str(sub_cnt))
     return render_template('submit.html', title='Submit to ' + problemName,
-                        form=form, legend='Submit to ' + problemName, user = current_user)
+                        form=form, legend='Submit to ' + problemName, user = current_user, sub_problem=problemName)
 
 @app.route("/submission/<int:sub_id>")
 @login_required
