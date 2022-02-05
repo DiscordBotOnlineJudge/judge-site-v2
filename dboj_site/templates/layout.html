@@ -89,6 +89,7 @@
                 <input type="submit" class="btn btn-primary" value="Submit Solution" />
               </form>
               <br><br>
+              
               <a href="/viewproblem/{{problemName}}/submissions/{{current_user.name}}">My Submissions</a>
             </div>
           </div>
@@ -96,10 +97,13 @@
           <div class="col-md-4">
             <div class="content-section">
               <h3>{{side_title}}</h3>
-              <a href="/viewproblem/{{sub_problem}}" style="font-size:20px">Back to {{sub_problem}}</a>
+              <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong>Back to {{sub_problem}}</strong></a>
               {% if sub_id %}
               <br><br>
               <a href="/submission/{{sub_id}}/source">View source</a>
+              {% elif sid %}
+              <br><br>
+              <a href="/submission/{{sid}}">View status</a>
               {% endif %}
             </div>
           </div>

@@ -7,7 +7,7 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <legend class="border-bottom mb-4">Submit to <a href="/viewproblem/{{pn}}">{{pn}}</a></legend>
             <div class="form-group">
                 {{ form.lang.label(class="form-control-label") }}
                 {% if form.lang.errors %}

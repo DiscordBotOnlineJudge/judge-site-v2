@@ -159,7 +159,7 @@ def submit(problemName):
         
         lang = form.lang.data
         src = form.src.data
-        settings.insert_one({"type":"submission", "problem":problemName, "author":current_user.name, "message":src, "id":sub_cnt, "output":""})        
+        settings.insert_one({"type":"submission", "problem":problemName, "author":current_user.name, "lang":lang, "message":src, "id":sub_cnt, "output":""})        
 
         judges = settings.find_one({"type":"judge", "status":0})
         if judges is None:
@@ -173,7 +173,7 @@ def submit(problemName):
 
         return redirect('/submission/' + str(sub_cnt))
     return render_template('submit.html', title='Submit to ' + problemName,
-                        form=form, legend='Submit to ' + problemName, user = current_user, sub_problem=problemName)
+                        form=form, pn = problemName, user = current_user, sub_problem=problemName)
 
 """@app.route("")
 def resubmit():
@@ -215,6 +215,10 @@ def submission(sub_id):
         abort(403)
     return render_template('submission.html', sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
 
+@app.route("/viewproblem/<string:problemName>/submissions/<string:user>")
+def submission_page(problemName, user):
+    return render_template('submission-page.html', problemName = problemName, user = user)
+
 @app.route("/submission/<int:sub_id>/source")
 @login_required
 def view_source(sub_id):
@@ -223,7 +227,7 @@ def view_source(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('view_source.html', sub_problem=sub['problem'], src=sub['message'], author=sub['author'])
+    return render_template('view_source.html', sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace(" ", "%sp%"), author=sub['author'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
