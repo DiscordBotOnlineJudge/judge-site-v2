@@ -77,6 +77,7 @@ def upload_file():
             return redirect(url_for("export"))
     else:
         flash("No file was selected", "danger")
+        settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
         return redirect("/export")
     print("Done")
     settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
