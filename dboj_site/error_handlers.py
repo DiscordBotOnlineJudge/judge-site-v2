@@ -29,3 +29,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def error_occurred(e):
     return render_template('500.html', title="500 Something Went Wrong"), 500
+
+@app.errorhandler(413)
+def file_upload_too_large(e):
+    return render_template('413.html', title="413 File Upload Too Large"), 413

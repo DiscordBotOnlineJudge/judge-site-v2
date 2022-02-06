@@ -10,6 +10,7 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '9791627cffb23ce1d67adcde28dbf2e6'
+app.config['MAX_CONTENT_LENGTH'] = 134217728
 
 # Codemirror for Flask
 CODEMIRROR_LANGUAGES = ['python']
