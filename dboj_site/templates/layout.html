@@ -107,6 +107,13 @@
               {% endif %}
             </div>
           </div>
+        {% elif problems %}
+        <div class="col-md-4">
+          <div class="content-section">
+            <h3>{{side_title}}</h3>
+            <a href="/private-problems" style="font-size:18px">View private problems</a>
+          </div>
+        </div>
         {% endif %}
       </div>
     </main>

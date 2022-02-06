@@ -20,14 +20,26 @@ md = Markdown(app,
 
 @app.route("/problems")
 def problems():
-    problems = sorted([(x['name'], x['points'], x['types'], x['authors']) for x in settings.find({"type":"problem", "published":True})], key = cmp_to_key(extras.cmpProblem))
+    problems = sorted([(x['name'], x['points'], ", ".join(x['types']), ", ".join(x['authors'])) for x in settings.find({"type":"problem", "published":True})], key = cmp_to_key(extras.cmpProblem))
     return render_template('problems.html', problems=problems, title="Problems")
+
+@app.route("/private-problems")
+@login_required
+def private_problems():
+    arr = []
+    for x in settings.find({"type":"problem", "published":False}):
+        if not extras.perms(x, current_user.name):
+            arr.append((x['name'], x['points'], x['contest'], ", ".join(x['types']), ", ".join(x['authors'])))
+    arr = sorted(arr, key = cmp_to_key(cmpProblem))
+    return render_template('private_problems.html', private_problems = arr, title = "Private problems visible to " + current_user.name)
 
 @app.route("/viewproblem/<string:problemName>", methods=['GET', 'POST'])
 def viewProblem(problemName):
     problem = settings.find_one({"type":"problem", "name":problemName})
-    if problem is None or (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
-        return render_template('404.html'), 404
+    if problem is None:
+        abort(404)
+    elif (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
+        abort(403)
     storage_client = storage.Client()
     storage_client.get_bucket("discord-bot-oj-file-storage").get_blob("ProblemStatements/" + problemName + ".txt").download_to_filename("statement.md")
     src = open("statement.md", "r").read()
