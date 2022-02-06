@@ -25,6 +25,10 @@ cluster = MongoClient("mongodb+srv://onlineuser:$" + os.getenv("PASSWORD") + "@d
 mdb = cluster['database']
 settings = mdb['settings']
 
+# Google cloud storage
+stc = storage.Client()
+bucket = stc.bucket("discord-bot-oj-file-storage")
+
 settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
 
 from dboj_site import routes

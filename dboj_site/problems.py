@@ -1,7 +1,7 @@
 import os
 import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
-from dboj_site import app, settings, extras
+from dboj_site import app, settings, extras, bucket
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
 from flask_login import login_user, current_user, logout_user, login_required
@@ -40,9 +40,13 @@ def viewProblem(problemName):
         abort(404)
     elif (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
         abort(403)
-    storage_client = storage.Client()
-    storage_client.get_bucket("discord-bot-oj-file-storage").get_blob("ProblemStatements/" + problemName + ".txt").download_to_filename("statement.md")
-    src = open("statement.md", "r").read()
+        
+    src = None
+    try:
+        bucket.blob("ProblemStatements/" + problemName + ".txt").download_to_filename("statement.md")
+        src = open("statement.md", "r").read()
+    except:
+        src = "This problem does not yet have a problem statement."
     return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, src = ("\n" + src))
 
 @app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
