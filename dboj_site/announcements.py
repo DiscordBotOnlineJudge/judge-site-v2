@@ -32,7 +32,7 @@ def new_post():
         return render_template('create_post.html', title='New Site Announcement',
                             form=form, legend='New Site Announcement', user = current_user)
     else:
-        abort(404)
+        abort(403)
 
 
 @app.route("/post/<int:post_id>")

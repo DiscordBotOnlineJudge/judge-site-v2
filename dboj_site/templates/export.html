@@ -1,8 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
     <legend class="border-bottom mb-4">Export Problem Data</legend>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=file>
-        <input type=submit value=Upload>
-    </form>
+    <body>
+
+        <p>
+            To export problem data to the judge, upload a <code>zip</code> archive with the testcases and problem configuration. <br><br>
+            Details can be found in the <a href="/about/problem-setting">documentation</a>.
+        </p>
+
+        <form method="POST" action="" enctype="multipart/form-data" onsubmit="on_upload()">
+            <p><input type="file" name="file"></p>
+            <p><input type="submit" value="Submit" id="submit_button"></p>
+        </form>
+
+        <p id="wait"></p>
+    </body>
+
+    <script>
+        var on_upload = function() {
+            document.getElementById("wait").innerHTML = "Uploading, please wait a few seconds..."
+            document.getElementById("submit_button").disabled = true
+        };
+    </script>
 {% endblock content %}

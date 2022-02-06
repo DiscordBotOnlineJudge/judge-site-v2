@@ -25,4 +25,6 @@ cluster = MongoClient("mongodb+srv://onlineuser:$" + os.getenv("PASSWORD") + "@d
 mdb = cluster['database']
 settings = mdb['settings']
 
+settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+
 from dboj_site import routes

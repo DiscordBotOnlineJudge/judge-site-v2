@@ -1,5 +1,7 @@
-import os
+import os, sys
 import secrets
+from dboj_site import problem_uploading
+from google.cloud import storage
 from flask import render_template, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
@@ -37,23 +39,45 @@ def view_contests():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
 
-@app.route('/export', methods=['GET', 'POST'])
-def upload_file():
-    abort(404)
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part', 'danger')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file', 'danger')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(filename)
-            return redirect(url_for('download_file', name=filename))
+@app.route('/export')
+@login_required
+def export():
     return render_template('export.html', title="Export problem data")
 
+def is_busy():
+    return settings.find_one({"type":"busy"})['busy']
+
+@app.route('/export', methods=['POST'])
+def upload_file():
+    if not current_user.is_admin:
+        abort(403)
+    uploaded_file = request.files['file']
+
+    if is_busy():
+        flash("An upload is in progress. Please try again in a few seconds.", "danger")
+        return redirect(url_for('export'))
+    settings.update_one({"type":"busy"}, {"$set":{"busy":True}})
+    if uploaded_file.filename != '':
+        if not uploaded_file.filename.endswith(".zip"):
+            flash("Error: the uploaded file does not have a .zip extention", "danger")
+            settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+            return redirect(url_for('export'))
+        uploaded_file.save("data.zip")
+        try:
+            os.system("rm data.zip; rm -r problemdata")
+            msg = problem_uploading.uploadProblem(settings, storage.Client(), current_user.name)
+            flash(msg, "success")
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(e)
+            flash("An error occurred: " + str(e), "danger")
+            settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+            return redirect(url_for("export"))
+    else:
+        flash("No file was selected", "danger")
+        return redirect("/export")
+    print("Done")
+    settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+    return redirect(url_for('home'))
