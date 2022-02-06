@@ -62,9 +62,9 @@ def upload_file():
             flash("Error: the uploaded file does not have a .zip extention", "danger")
             settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
             return redirect(url_for('export'))
+        os.system("rm data.zip; rm -r problemdata")
         uploaded_file.save("data.zip")
         try:
-            os.system("rm data.zip; rm -r problemdata")
             msg = problem_uploading.uploadProblem(settings, storage.Client(), current_user.name)
             flash(msg, "success")
         except Exception as e:
