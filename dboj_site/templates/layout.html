@@ -51,7 +51,13 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_admin %}
-                <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Site Announcement</a>
+                <div class="btn-group">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/post/new">New Site Announcement</a>
+                    <a class="dropdown-item" href="/export">Upload Problem Data</a>
+                  </div>
+                </div>
               {% endif %}
               {% if current_user.is_authenticated %}
                 <p></p>
