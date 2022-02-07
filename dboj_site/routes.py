@@ -36,9 +36,6 @@ def view_contests():
     return render_template('contests.html', title="Contests")
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['zip']
-
 @app.route('/export')
 @login_required
 def export():

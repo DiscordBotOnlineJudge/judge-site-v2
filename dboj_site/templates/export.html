@@ -8,10 +8,15 @@
             Details can be found in the <a href="/about/problem-setting">documentation</a>.
         </p>
 
-        <form method="POST" action="" enctype="multipart/form-data" onsubmit="on_upload()">
-            <p><input type="file" name="file"></p>
-            <p><input type="submit" value="Submit" id="submit_button"></p>
-        </form>
+        <article class="media content-section">
+            <div class="media-body">
+                <h6><a class="article-title">Upload problem zip file here:</a></h6>
+                <form method="POST" action="" enctype="multipart/form-data" onsubmit="on_upload()">
+                    <p><input type="file" name="file"></p>
+                    <p><input type="submit" value="Submit" id="submit_button"></p>
+                </form>
+            </div>
+        </article>
 
         <p id="wait"></p>
     </body>
