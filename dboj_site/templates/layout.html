@@ -113,13 +113,48 @@
               {% endif %}
             </div>
           </div>
-        {% elif problems %}
+        {% elif problems and not contest %}
         <div class="col-md-4">
           <div class="content-section">
             <h3>{{side_title}}</h3>
             <a href="/private-problems" style="font-size:18px">View private problems</a>
           </div>
         </div>
+        {% elif t %}
+        <body>
+          <div class="col-md-4">
+            <div class="content-section">
+              <legend class="border-bottom mb-4">Contest timer</legend>
+              <p id="timer"></p>
+            </div>
+          </div>
+      
+          <script type="text/javascript">
+              var month = parseInt('{{t[1]}}'), day = parseInt('{{t[2]}}'), year = parseInt('{{t[0]}}'), hh = parseInt('{{t[3]}}'), mm = parseInt('{{t[4]}}'), ss = parseInt('{{t[5]}}');
+              var dateStr = month + " " + day + " " + year + " " + hh + ":" + mm + ":" + ss;
+              var startDate = new Date(dateStr).getTime();
+              var x = setInterval(function() {
+                  var now = new Date().getTime();
+                  var elapsed = now - startDate;
+                  var lenMillis = parseInt('{{len}}') * 1000;
+                  var distance = lenMillis - elapsed;
+                  
+                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                  
+                  if (distance < 0) {
+                      clearInterval(x);
+                      document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{contestName}}</b> has ended.";
+                      reload();
+                  }
+                  else {
+                      document.getElementById("timer").innerHTML = "You have <b>" + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds</b> left on contest <b>{{contestName}}</b>.";
+                  }
+              }, 1000);
+          </script>
+      </body>
         {% endif %}
       </div>
     </main>

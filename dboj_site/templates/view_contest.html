@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
+    <legend class="border-bottom mb-4">Contest <code>{{contestName}}</code></legend>
+
+    <p id="source">
+    {{src}}
+    </p>
+
+    <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
+        <p><input type="submit" value="Join contest and start window countdown!" id="submit_button"></p>
+    </form>
+
+    <script>
+        document.getElementById("source").innerHTML = document.getElementById("source").innerText.replaceAll("%nl%", "<br>").replaceAll("%sp%", "&ensp;")
+
+        var on_join = function() {
+            return confirm("Are you sure you want to start the contest?");
+        };
+    </script>
+
+{% endblock content %}

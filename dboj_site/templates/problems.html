@@ -18,23 +18,44 @@
     }
 </style>
 
+{% if contest %}
+<h2>Problems in contest <code>{{contest}}</code></h2>
+{% else %}
 <h2>Problems</h2>
-<table>
-    <tr>
-        <td>Problem name</td>
-        <td>Points</td>
-        <td>Problem types</td>
-        <td>Authors/Testers</td>
-    </tr>
+{% endif %}
 
-    {% for problem in problems %}
-    <tr>
-        <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
-        <th>{{problem[1]}}</th>
-        <th>{{problem[2]}}</th>
-        <th>{{problem[3]}}</th>
-    </tr>
-    {% endfor %}
+<table>
+    {% if contest %}
+        <tr>
+            <td>Problem name</td>
+            <td>&#10003;</td>
+        </tr>
+        {% for problem in problems %}
+        <tr>
+            <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+            {% if problem[1] %}
+            <th style="color:green; font-weight:bold">Solved</th>
+            {% else %}
+            <th style="color:gray; font-weight:normal">Not solved yet</th>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>Problem name</td>
+            <td>Points</td>
+            <td>Problem types</td>
+            <td>Authors/Testers</td>
+        </tr>
+        {% for problem in problems %}
+        <tr>
+            <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+            <th>{{problem[1]}}</th>
+            <th>{{problem[2]}}</th>
+            <th>{{problem[3]}}</th>
+        </tr>
+        {% endfor %}
+    {% endif %}
 </table>
 
 {% endblock content %}

@@ -17,11 +17,28 @@ md = Markdown(app,
               output_format='html4',
              )
 
+def contest_problems(problems):
+    if not current_user.is_authenticated or current_user.is_anonymous:
+        return None
+    contest = None
+    for x in settings.find({"type":"access", "name":current_user.name}):
+        if x['mode'] != 'admin' and x['mode'] != 'owner':
+            contest = x['mode']
+    if not contest:
+        return None
+    solved = settings.find_one({"type":"profile", "name":current_user.name})['solved']
+    for problem in settings.find({"type":"problem", "contest":contest}):
+        if not perms(problem, current_user.name):
+            problems.append((problem['name'], problem['name'] in solved, problem['points'], ", ".join(problem['types']), ", ".join(problem['authors'])))
+    return contest
 
 @app.route("/problems")
 def problems():
-    problems = sorted([(x['name'], x['points'], ", ".join(x['types']), ", ".join(x['authors'])) for x in settings.find({"type":"problem", "published":True})], key = cmp_to_key(extras.cmpProblem))
-    return render_template('problems.html', problems=problems, title="Problems")
+    problems = []
+    contest = contest_problems(problems)
+    if not contest:
+        problems = sorted([(x['name'], x['points'], ", ".join(x['types']), ", ".join(x['authors'])) for x in settings.find({"type":"problem", "published":True})], key = cmp_to_key(extras.cmpProblem))
+    return render_template('problems.html', problems=problems, contest=contest, title="Problems")
 
 @app.route("/private-problems")
 @login_required
@@ -33,7 +50,7 @@ def private_problems():
     arr = sorted(arr, key = cmp_to_key(cmpProblem))
     return render_template('private_problems.html', private_problems = arr, title = "Private problems visible to " + current_user.name)
 
-@app.route("/viewproblem/<string:problemName>", methods=['GET', 'POST'])
+@app.route("/viewproblem/<string:problemName>")
 def viewProblem(problemName):
     problem = settings.find_one({"type":"problem", "name":problemName})
     if problem is None:
@@ -52,6 +69,12 @@ def viewProblem(problemName):
 @app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
 @login_required
 def submit(problemName):
+    problem = settings.find_one({"type":"problem", "name":problemName})
+    if problem is None:
+        abort(404)
+    elif (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
+        abort(403)
+
     form = SubmitForm()
     if form.validate_on_submit():
         sub_cnt = settings.find_one({"type":"sub_cnt"})['cnt']
@@ -64,7 +87,7 @@ def submit(problemName):
         judges = settings.find_one({"type":"judge", "status":0})
         if judges is None:
             flash("All of the judge's grading servers are currently offline or in use. Please resubmit in a few seconds.", "danger")
-            return
+            return redirect("/viewproblem/" + problemName + "/submit")
 
         manager = Manager()
         return_dict = manager.dict()

@@ -1,5 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
-    <legend class="border-bottom mb-4">Contests</legend>
-    <p>Contests page coming soon!</p>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        font-weight:normal;
+    }
+
+    tr:nth-child(1) {
+        background-color: #dddddd;
+    }
+</style>
+
+<legend class="border-bottom mb-4">Contests</code></legend>
+<table>
+    <tr>
+        <td>Contest</td>
+        <td>Start</td>
+        <td>End</td>
+
+    </tr>
+
+    {% for contest in contests %}
+    <tr>
+        <th><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
+        <th>{{contest['start']}}</th>
+        <th>{{contest['end']}}</th>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock content %}

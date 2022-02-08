@@ -23,22 +23,20 @@ class User:
         self.is_anonymous = False
         self.is_admin = (not settings.find_one({"type":"access", "mode":"admin", "name":name}) is None)
     
+    def t(self):
+        if not self.is_authenticated or self.is_anonymous:
+            return None
+        contest = None
+        for x in settings.find({"type":"access", "name":self.name}):
+            if x['mode'] != 'admin' and x['mode'] != 'owner':
+                contest = x
+        return contest
+
     def get_id(self):
         return chr(self.id)
 
     def __repr__(self):
-        return f"User('{self.username}')"
+        return f"User('{self.name}')"
 
     def get_user(id):
         return User(settings.find_one({"type":"account", "id":id})['name'])
-
-
-"""class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    content = db.Column(db.Text, nullable=False)
-
-    def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"
-"""
