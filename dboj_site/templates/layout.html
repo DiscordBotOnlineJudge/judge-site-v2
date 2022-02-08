@@ -101,13 +101,13 @@
           {% elif sub_problem %}
           <div class="content-section">
             <h3>{{side_title}}</h3>
-            <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong>Back to {{sub_problem}}</strong></a>
+            <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong> &#8592; Back to {{sub_problem}}</strong></a>
             {% if sub_id %}
             <br><br>
             <a href="/submission/{{sub_id}}/source">View source</a>
             {% elif sid %}
             <br><br>
-            <a href="/submission/{{sid}}">View status</a>
+            <a href="/submission/{{sid}}"> &#8592; View status</a>
             {% endif %}
           </div>
           {% elif problems and not contest %}
@@ -117,10 +117,18 @@
           </div>
           {% elif contestName %}
           <div class="content-section">
+            <a href="/contests" style="font-size:18px"><strong> &#8592; Back to contests</strong></a>
+          </div>
+
+          <div class="content-section">
             <legend class="border-bottom mb-4">Enter contest</legend>
             <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
               <input type="submit" value="Join contest and start window countdown!" id="submit_button">
             </form>
+          </div>
+          {% elif private_problems %}
+          <div class="content-section">
+            <a href="/problems" style="font-size:18px"><strong> &#8592; Back to published problems</strong></a>
           </div>
           {% endif %}
           
