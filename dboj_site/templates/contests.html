@@ -18,7 +18,8 @@
     }
 </style>
 
-<legend class="border-bottom mb-4">Contests</code></legend>
+<h2>Contests</h2>
+<legend class="border-bottom mb-4">Ongoing Contests</code></legend>
 <table>
     <tr>
         <td>Contest</td>
@@ -27,20 +28,56 @@
     </tr>
 
     {% for contest in contests %}
+    {% if contest['color'] == 'lightgreen' %}
     <tr>
         <th style="background-color:{{contest['color']}}"><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
         <th>{{contest['start']}}</th>
         <th>{{contest['end']}}</th>
     </tr>
+    {% endif %}
     {% endfor %}
 </table>
 
 <br>
-<h6>Legend:</h6>
+
+<legend class="border-bottom mb-4">Upcoming Contests</code></legend>
 <table>
-    <tr><td style="background-color:lightgreen">Green: Active/Ongoing Contest</td>
-    <tr><td style="background-color:yellow">Yellow: Contest Not Started Yet</td>
-    <tr><td style="background-color:lightgray">Gray: Past Contest</td>
+    <tr>
+        <td>Contest</td>
+        <td>Start</td>
+        <td>End</td>
+    </tr>
+
+    {% for contest in contests %}
+    {% if contest['color'] == 'yellow' %}
+    <tr>
+        <th style="background-color:{{contest['color']}}"><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
+        <th>{{contest['start']}}</th>
+        <th>{{contest['end']}}</th>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+<br>
+
+<legend class="border-bottom mb-4">Past Contests</code></legend>
+<table>
+    <tr>
+        <td>Contest</td>
+        <td>Start</td>
+        <td>End</td>
+    </tr>
+
+    {% for contest in contests %}
+    {% if contest['color'] == 'lightgray' %}
+    <tr>
+        <th style="background-color:{{contest['color']}}"><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
+        <th>{{contest['start']}}</th>
+        <th>{{contest['end']}}</th>
+    </tr>
+    {% endif %}
+    {% endfor %}
 </table>
 
 {% endblock content %}
