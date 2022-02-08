@@ -17,12 +17,17 @@ md = Markdown(app,
               output_format='html4',
              )
 
+def in_contest(post):
+    elapsed = contests.compare(post['start'], contests.current_time())
+    contest_len = getLen(settings, post['mode'])
+    return elapsed <= contest_len
+
 def contest_problems(problems):
     if not current_user.is_authenticated or current_user.is_anonymous:
         return None
     contest = None
     for x in settings.find({"type":"access", "name":current_user.name}):
-        if x['mode'] != 'admin' and x['mode'] != 'owner':
+        if x['mode'] != 'admin' and x['mode'] != 'owner' and in_contest(x):
             contest = x['mode']
     if not contest:
         return None
