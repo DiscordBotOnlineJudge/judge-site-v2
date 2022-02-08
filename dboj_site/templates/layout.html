@@ -124,6 +124,10 @@
           </div>
 
           <script type="text/javascript">
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
             var month = parseInt('{{t[1]}}'), day = parseInt('{{t[2]}}'), year = parseInt('{{t[0]}}'), hh = parseInt('{{t[3]}}'), mm = parseInt('{{t[4]}}'), ss = parseInt('{{t[5]}}');
             var dateStr = month + " " + day + " " + year + " " + hh + ":" + mm + ":" + ss;
             var startDate = new Date(dateStr).getTime();
@@ -141,6 +145,7 @@
                 if (distance < 0) {
                     clearInterval(x);
                     document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{contestName}}</b> has ended.";
+                    sleep(2000);
                     location.reload();
                 }
                 else {
