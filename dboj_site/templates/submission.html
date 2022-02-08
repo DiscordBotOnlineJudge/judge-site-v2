@@ -16,7 +16,7 @@
     </style>
 
     {% if output %}
-        <p class="markdown-body" class="tab" id="content" style="font-family:'Courier New'; font-size:16px">
+        <p class="markdown-body" class="tab" id="content" style="font-family:monospace; font-size:16px">
         {{output}}
         </p>
     {% else %}
@@ -24,7 +24,7 @@
     {% endif %}
 
     <script>
-        document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replaceAll("%nl%", "<br>").replaceAll("      ", "&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;")
+        document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replaceAll("%nl%", "<br>").replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;");
     </script>
 
 {% endblock content %}

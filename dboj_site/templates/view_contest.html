@@ -3,13 +3,9 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
     <legend class="border-bottom mb-4">Joining Contest <code style="font-size:larger">{{contestName}}</code></legend>
 
-    <p id="source">
+    <p id="source" style="font-family:monospace">
     {{src}}
     </p>
-
-    <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
-        <p><input type="submit" value="Join contest and start window countdown!" id="submit_button"></p>
-    </form>
 
     <script>
         document.getElementById("source").innerHTML = document.getElementById("source").innerText.replaceAll("%nl%", "<br>").replaceAll("%sp%", "&ensp;")

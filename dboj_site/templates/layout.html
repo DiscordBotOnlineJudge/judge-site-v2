@@ -115,12 +115,19 @@
             <h3>{{side_title}}</h3>
             <a href="/private-problems" style="font-size:18px">View private problems</a>
           </div>
+          {% elif contestName %}
+          <div class="content-section">
+            <legend class="border-bottom mb-4">Enter contest</legend>
+            <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
+              <input type="submit" value="Join contest and start window countdown!" id="submit_button">
+            </form>
+          </div>
           {% endif %}
           
           {% if t %}
           <div class="content-section">
             <legend class="border-bottom mb-4">Contest timer</legend>
-            <p id="timer" style="max-width:fit-content"></p>
+            <p id="timer" style="max-width:fit-content">Calculating remaining time...</p>
           </div>
 
           <script type="text/javascript">
@@ -142,11 +149,13 @@
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{contestName}}</b> has ended.";
-                    sleep(5000);
-                    location.reload();
+                if (distance < 5) {
+                  clearInterval(x);
+                  document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
+                  location.reload();
+                }
+                else if (distance < 0) {
+                  document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
                 }
                 else {
                     done = false;
@@ -154,13 +163,11 @@
                     if (days > 0) {
                       dayMsg = " " + days + " days, ";
                     }
-                    document.getElementById("timer").innerHTML = "You have <b>" + dayMsg + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds</b> left on contest <b>{{contestName}}</b>.";
+                    document.getElementById("timer").innerHTML = "You have <b>" + dayMsg + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds</b> left on contest <b>{{ctst}}</b>.";
                 }
             }, 1000);
           </script>
           {% endif %}
-        </div>
-        </div>
         </div>
       </div>
     </main>

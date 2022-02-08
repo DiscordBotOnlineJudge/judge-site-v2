@@ -70,4 +70,4 @@ def inject_contest_time():
     if not contest:
         return dict(t = None)
     else:
-        return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], contestName = contest['mode'])
+        return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], ctst = contest['mode'])
