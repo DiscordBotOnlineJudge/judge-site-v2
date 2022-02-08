@@ -7,6 +7,7 @@ from dboj_site import app, settings, extras, bucket
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
 from dboj_site.judge import *
+from dboj_site.contests import *
 from flask_login import login_user, current_user, logout_user, login_required
 from google.cloud import storage
 from functools import cmp_to_key
@@ -22,14 +23,25 @@ md = Markdown(app,
 
 @app.route("/contests")
 def view_contests():
-    return render_template('contests.html', title="Contests", contests=[x for x in settings.find({"type":"contest"})])
+    contests = []
+    for x in settings.find({"type":"contest"}):
+        try:
+            date(x['start'], x['end'], current_time())
+            x['color'] = 'lightgreen'
+        except Exception as e:
+            if "started" in str(e):
+                x['color'] = 'yellow'
+            else:
+                x['color'] = 'lightgray'
+        contests.append(x)
+    return render_template('contests.html', title="Contests", contests=contests)
 
 @app.route("/contest/<string:contestName>")
 def contest_page(contestName):
     if not settings.find_one({"type":"contest", "name":contestName}):
         abort(404)
     bucket.blob("ContestInstructions/" + contestName + ".txt").download_to_filename("instructions.txt")
-    return render_template('view_contest.html', title="Contest " + contestName, contestName=contestName, src = open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
+    return render_template('view_contest.html', title="Contest " + contestName, join_contest = True, contestName=contestName, src = open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
 
 @app.route("/contest/<string:contestName>", methods=['POST'])
 @login_required

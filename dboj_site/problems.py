@@ -35,6 +35,7 @@ def contest_problems(problems):
     for problem in settings.find({"type":"problem", "contest":contest}):
         if not perms(problem, current_user.name):
             problems.append((problem['name'], problem['name'] in solved, problem['points'], ", ".join(problem['types']), ", ".join(problem['authors'])))
+    problems.sort(key = cmp_to_key(cmpProblem))
     return contest
 
 @app.route("/problems")

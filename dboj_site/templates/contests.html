@@ -24,16 +24,23 @@
         <td>Contest</td>
         <td>Start</td>
         <td>End</td>
-
     </tr>
 
     {% for contest in contests %}
     <tr>
-        <th><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
+        <th style="background-color:{{contest['color']}}"><a href="/contest/{{contest['name']}}">{{contest['name']}}</a></th>
         <th>{{contest['start']}}</th>
         <th>{{contest['end']}}</th>
     </tr>
     {% endfor %}
+</table>
+
+<br>
+<h6>Legend:</h6>
+<table>
+    <tr><td style="background-color:lightgreen">Green: Active/Ongoing Contest</td>
+    <tr><td style="background-color:yellow">Contest Not Started Yet</td>
+    <tr><td style="background-color:lightgray">Gray: Past Contest</td>
 </table>
 
 {% endblock content %}

@@ -117,8 +117,7 @@ def put_timer(settings, user):
 
 def joinContest(settings, contest, user):
     cont = settings.find_one({"type":"contest", "name":contest})
-    if (not contests.date(cont['start'], cont['end'], contests.current_time())):
-        raise Exception("This contest is not currently active.")
+    contests.date(cont['start'], cont['end'], contests.current_time())
     if not settings.find_one({"type":"access", "mode":contest, "name":user}) is None:
         raise Exception("You already joined this contest.")
 
