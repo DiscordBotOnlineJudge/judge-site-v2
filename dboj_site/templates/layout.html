@@ -122,14 +122,11 @@
             <legend class="border-bottom mb-4">Contest timer</legend>
             <p id="timer" style="max-width:fit-content"></p>
           </div>
-          {% endif %}
-        </div>
-        
-        <script type="text/javascript">
+
+          <script type="text/javascript">
             var month = parseInt('{{t[1]}}'), day = parseInt('{{t[2]}}'), year = parseInt('{{t[0]}}'), hh = parseInt('{{t[3]}}'), mm = parseInt('{{t[4]}}'), ss = parseInt('{{t[5]}}');
             var dateStr = month + " " + day + " " + year + " " + hh + ":" + mm + ":" + ss;
             var startDate = new Date(dateStr).getTime();
-            var done = true;
             var x = setInterval(function() {
                 var now = new Date().getTime();
                 var elapsed = now - startDate;
@@ -142,12 +139,8 @@
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
                 if (distance < 0) {
-                    if (done) {
-                      clearInterval(x);
-                      document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{contestName}}</b> has ended.";
-                      return;
-                    }
-                    done = true;
+                    clearInterval(x);
+                    document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{contestName}}</b> has ended.";
                     location.reload();
                 }
                 else {
@@ -159,7 +152,9 @@
                     document.getElementById("timer").innerHTML = "You have <b>" + dayMsg + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds</b> left on contest <b>{{contestName}}</b>.";
                 }
             }, 1000);
-        </script>
+          </script>
+          {% endif %}
+        </div>
         </div>
         </div>
       </div>

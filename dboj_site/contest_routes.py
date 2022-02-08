@@ -8,6 +8,7 @@ from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
 from dboj_site.judge import *
 from dboj_site.contests import *
+from dboj_site.problems import in_contest
 from flask_login import login_user, current_user, logout_user, login_required
 from google.cloud import storage
 from functools import cmp_to_key
@@ -59,7 +60,7 @@ def get_contest():
         return None
     contest = None
     for x in settings.find({"type":"access", "name":current_user.name}):
-        if x['mode'] != 'admin' and x['mode'] != 'owner':
+        if x['mode'] != 'admin' and x['mode'] != 'owner' and in_contest(x):
             contest = x
     return contest
 

@@ -2,6 +2,7 @@ import os
 import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras, bucket
+from dboj_site import problem_uploading as problem_uploading
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
 from flask_login import login_user, current_user, logout_user, login_required
@@ -157,3 +158,49 @@ def view_source(sub_id):
     elif sub['author'] != current_user.name:
         abort(403)
     return render_template('view_source.html', title="View source from " + str(sub_id), sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace(" ", "%sp%"), author=sub['author'])
+
+@app.route('/export')
+@login_required
+def export():
+    if not current_user.is_admin:
+        abort(403)
+    return render_template('export.html', title="Export problem data")
+
+def is_busy():
+    return settings.find_one({"type":"busy"})['busy']
+
+@app.route('/export', methods=['POST'])
+def upload_file():
+    if not current_user.is_admin:
+        abort(403)
+    uploaded_file = request.files['file']
+
+    if is_busy():
+        flash("An upload is in progress. Please try again in a few seconds.", "danger")
+        return redirect(url_for('export'))
+    settings.update_one({"type":"busy"}, {"$set":{"busy":True}})
+    if uploaded_file.filename != '':
+        if not uploaded_file.filename.endswith(".zip"):
+            flash("Error: the uploaded file does not have a .zip extention", "danger")
+            settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+            return redirect(url_for('export'))
+        os.system("rm data.zip; rm -r problemdata")
+        uploaded_file.save("data.zip")
+        try:
+            msg = problem_uploading.uploadProblem(settings, storage.Client(), current_user.name)
+            flash(msg, "success")
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(e)
+            flash("An error occurred: " + str(e), "danger")
+            settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+            return redirect(url_for("export"))
+    else:
+        flash("No file was selected", "danger")
+        settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+        return redirect("/export")
+    print("Done")
+    settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
+    return redirect(url_for('home'))
