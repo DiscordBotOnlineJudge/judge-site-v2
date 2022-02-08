@@ -19,17 +19,17 @@ md = Markdown(app,
 
 @app.errorhandler(403)
 def error_occurred(e):
-    return render_template('403.html', title="403 Forbidden"), 403
+    return render_template('403.html', title="403 Forbidden", error = True), 403
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', title="404 Not Found"), 404
+    return render_template('404.html', title="404 Not Found", error = True), 404
 
 
 @app.errorhandler(500)
 def error_occurred(e):
-    return render_template('500.html', title="500 Something Went Wrong"), 500
+    return render_template('500.html', title="500 Something Went Wrong", error = True), 500
 
 @app.errorhandler(413)
 def file_upload_too_large(e):
-    return render_template('413.html', title="413 File Upload Too Large"), 413
+    return render_template('413.html', title="413 File Upload Too Large", error = True), 413
