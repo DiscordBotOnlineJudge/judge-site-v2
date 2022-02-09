@@ -84,6 +84,6 @@ def uploadProblem(settings, storage_client, author):
         except:
             pass
     except KeyError as e:
-        raise Exception("The parameter " + str(e) + " is missing in the params.yaml file")
+        raise Exception("The parameter " + str(e) + " is missing from the params.yaml file")
     
     return ("Successfully uploaded problem data as problem \"" + params['name'] + "\"!")
