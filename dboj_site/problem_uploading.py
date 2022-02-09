@@ -3,6 +3,8 @@ import os
 import yaml
 from google.cloud import storage
 
+max_size = 512 # Maximum memory limit for languages
+
 def delete_blob(storage_client, blobname):
     blob = storage_client.blob(blobname)
     blob.delete()
@@ -71,8 +73,8 @@ def uploadProblem(settings, storage_client, author):
         d['memory-limit'] = params['memory-limit']
 
         for x in d['memory-limit']:
-            if d['memory-limit'][x] > 786432:
-                raise Exception("Memory limit for " + x + " is too high. The maximum is 768 MB.")
+            if d['memory-limit'][x] > max_size * 1024:
+                raise Exception("Memory limit for " + x + " is too high. The maximum is " + max_size + " MB.")
 
         yaml.safe_dump(d, open("problemdata/resources.yaml", "w"))
         upload_blob(storage_client, "problemdata/resources.yaml", "TestData/" + params['name'] + "/resources.yaml")
