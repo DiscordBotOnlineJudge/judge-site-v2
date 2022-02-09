@@ -71,7 +71,7 @@ def viewProblem(problemName):
         src = open("statement.md", "r").read()
     except:
         src = "This problem does not yet have a problem statement."
-    return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, src = ("\n" + src))
+    return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, src = ("\n" + src.replace("<", "%lft%").replace(">", "%rit%")))
 
 @app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
 @login_required

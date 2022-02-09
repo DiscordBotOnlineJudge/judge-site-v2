@@ -8,7 +8,7 @@
     </p>
 
     <script>
-        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replaceAll("â‰¤", "≤")).replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">")
+        document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replaceAll("â‰¤", "≤")).replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replaceAll("%lft%", "&lt;").replaceAll("%rit%", "&gt;");
     </script>
 
 {% endblock content %}
