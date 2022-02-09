@@ -3,7 +3,7 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">Announcement by {{ post['author'] }}</a>
+        <a class="mr-2">Announcement by {{ post['author'] }}</a>
         {% if post['author'] == current_user.name %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post['id']) }}">Edit</a>
@@ -11,7 +11,7 @@
           </div>
         {% endif %}
       </div>
-      <h2 class="article-title">{{ post['title'] }}</h2>
+      <h3 class="article-title">{{ post['title'] }}</h3>
       <p class="article-content" id="content">{{ post['content'] }}</p>
       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
       <script>

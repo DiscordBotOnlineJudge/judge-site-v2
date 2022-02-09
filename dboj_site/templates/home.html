@@ -4,9 +4,9 @@
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">Announcement by {{ post['author'] }}</a>
+              <a class="mr-2">Announcement by {{ post['author'] }}</a>
             </div>
-            <h2><a class="article-title" href="{{ url_for('post', post_id=post['id']) }}">{{ post['title'] }}</a></h2>
+            <h3><a class="article-title" href="{{ url_for('post', post_id=post['id']) }}">{{ post['title'] }}</a></h3>
             <p class="article-content" class="markdown-body" id="content{{post['id']}}">{{ post['content'] }}</p>
 
             <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
