@@ -25,9 +25,11 @@ md = Markdown(app,
               output_format='html4',
              )
 
+def cmpPost(a, b):
+    return (-1 if a['id'] > b['id'] else 1)
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', title="Home", posts=[x for x in settings.find({"type":"post"})])
-
+    posts = sorted([x for x in settings.find({"type":"post"})], key = cmp_to_key(cmpPost))
+    return render_template('home.html', title="Home", posts=posts)

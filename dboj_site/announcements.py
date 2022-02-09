@@ -38,7 +38,7 @@ def new_post():
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = settings.find_one({"type":"post", "id":post_id})
-    return render_template('post.html', title=post['title'], post=post)
+    return render_template('post.html', title=post['title'], post=post, specific_post = True)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
