@@ -120,12 +120,19 @@
             <a href="/contests" style="font-size:18px"><strong> &#8592; Back to contests</strong></a>
           </div>
 
+          {% if not current_user.is_authenticated or current_user.is_anonymous %}
+          <div class="content-section">
+            <legend class="border-bottom mb-4">Enter contest</legend>
+            <p style="max-width:fit-content">Please <a href="/login?next=%2Fcontest%2F{{contestName}}">log in</a> to participate</p>
+          </div>
+          {% else %}
           <div class="content-section">
             <legend class="border-bottom mb-4">Enter contest</legend>
             <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
               <button type="submit" class="btn btn-primary" id="submit_button">Join contest</button>
             </form>
           </div>
+          {% endif %}
           {% elif private_problems %}
           <div class="content-section">
             <a href="/problems" style="font-size:18px"><strong> &#8592; Back to published problems</strong></a>
