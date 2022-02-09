@@ -74,7 +74,7 @@ def uploadProblem(settings, storage_client, author):
 
         for x in d['memory-limit']:
             if d['memory-limit'][x] > max_size * 1024:
-                raise Exception("Memory limit for " + x + " is too high. The maximum is " + max_size + " MB.")
+                raise Exception("Memory limit for " + x + " is too high. The maximum is " + str(max_size) + " MB.")
 
         yaml.safe_dump(d, open("problemdata/resources.yaml", "w"))
         upload_blob(storage_client, "problemdata/resources.yaml", "TestData/" + params['name'] + "/resources.yaml")
