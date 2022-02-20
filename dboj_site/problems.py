@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, yaml
 import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras, bucket
@@ -47,7 +47,7 @@ def problems():
         problems = sorted([(x['name'], x['points'], ", ".join(x['types']), ", ".join(x['authors'])) for x in settings.find({"type":"problem", "published":True})], key = cmp_to_key(extras.cmpProblem))
     return render_template('problems.html', problems=problems, contest=contest, title="Problems")
 
-@app.route("/private-problems")
+@app.route("/problems/private")
 @login_required
 def private_problems():
     arr = []
@@ -71,7 +71,11 @@ def viewProblem(problemName):
         src = open("statement.md", "r").read()
     except:
         src = "This problem does not yet have a problem statement."
-    return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, src = ("\n" + src.replace("<", "%lft%").replace(">", "%rit%")))
+
+    bucket.blob("TestData/" + problemName + "/resources.yaml").download_to_filename("resources.yaml")
+    resources = yaml.safe_load(open("resources.yaml", "r").read())
+
+    return render_template('view_problem.html', title="View problem " + problemName, problemName=problemName, resources=resources, src = ("\n" + src.replace("<", "%lft%").replace(">", "%rit%")))
 
 @app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
 @login_required
@@ -159,7 +163,7 @@ def view_source(sub_id):
         abort(403)
     return render_template('view_source.html', title="View source from " + str(sub_id), sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace(" ", "%sp%"), author=sub['author'])
 
-@app.route('/export')
+@app.route('/problems/export')
 @login_required
 def export():
     if not current_user.is_admin:
@@ -169,7 +173,7 @@ def export():
 def is_busy():
     return settings.find_one({"type":"busy"})['busy']
 
-@app.route('/export', methods=['POST'])
+@app.route('/problems/export', methods=['POST'])
 def upload_file():
     if not current_user.is_admin:
         abort(403)

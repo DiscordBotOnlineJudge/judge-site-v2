@@ -55,7 +55,7 @@
                   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="/post/new">New Site Announcement</a>
-                    <a class="dropdown-item" href="/export">Upload Problem Data</a>
+                    <a class="dropdown-item" href="/problems/export">Upload Problem Data</a>
                   </div>
                 </div>
               {% endif %}
@@ -91,9 +91,20 @@
           {% if problemName %}
           <div class="content-section">
             <h3>{{side_title}}</h3>
-            <form action="/viewproblem/{{problemName}}/submit">
-              <input type="submit" class="btn btn-primary" value="Submit Solution" />
-            </form>
+            <a href="/viewproblem/{{problemName}}/submit"><button class="btn btn-primary">Submit Solution</button></a>
+            <hr style="padding-bottom: 0.3em">
+            <span><strong>&#128337; Time limit: </strong>{{resources['time-limit']['general']}} seconds</span><br>
+            {% for specific_lang in resources['time-limit'] %}
+              {% if specific_lang != 'general' %}
+              <span>&emsp;{{specific_lang}}: {{resources['time-limit'][specific_lang]}} seconds</span><br>
+              {% endif %}
+            {% endfor %}
+            <span><strong>&#9870; Memory limit: </strong>{{resources['memory-limit']['general'] / 1024}} MB</span>
+            {% for specific_lang in resources['memory-limit'] %}
+              {% if specific_lang != 'general' %}
+              <span>&emsp;{{specific_lang}}: {{resources['memory-limit'][specific_lang] / 1024}} MB</span><br>
+              {% endif %}
+            {% endfor %}
             <br><br>
           </div>
           {% elif sub_problem %}
@@ -111,7 +122,7 @@
           {% elif problems and not contest %}
           <div class="content-section">
             <h3>{{side_title}}</h3>
-            <a href="/private-problems" style="font-size:18px">View private problems</a>
+            <a href="/problems/private"><button class="btn btn-outline-primary">View private problems</button></a>
           </div>
           {% elif contestName %}
           <div class="content-section">

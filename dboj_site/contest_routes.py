@@ -64,6 +64,18 @@ def get_contest():
             contest = x
     return contest
 
+@app.route("/contests/new")
+@login_required
+def set_contest():
+    return render_template('set_contest.html')
+
+@app.route("/contests/new", methods = ['POST'])
+@login_required
+def submit_contest():
+    form = ContestForm()
+    if form.validate_on_submit():
+        pass
+
 @app.context_processor
 def inject_contest_time():
     contest = get_contest()

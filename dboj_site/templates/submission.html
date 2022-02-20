@@ -15,13 +15,17 @@
         -->
     </style>
 
-    {% if output %}
-        <p class="markdown-body" class="tab" id="content" style="font-family:monospace; font-size:16px">
-        {{output}}
-        </p>
-    {% else %}
-    <strong>Waiting for response from a judging server...</strong>
-    {% endif %}
+    <article class="card md-3">
+        <div class="card-body">
+            {% if output %}
+                <p class="markdown-body" class="tab" id="content" style="font-family:monospace; font-size:16px">
+                {{output}}
+                </p>
+            {% else %}
+            <strong>Waiting for response from a judging server...</strong>
+            {% endif %}
+        </div>
+    </article>
 
     <script>
         document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replaceAll("%nl%", "<br>").replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;");

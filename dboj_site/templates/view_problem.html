@@ -3,9 +3,13 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
     <legend class="border-bottom mb-4">Problem Statement for <code>{{problemName}}</code></legend>
 
-    <p class="markdown-body" id="content">
-    {{src}}
-    </p>
+    <article class="card mb-3">
+        <div class="card-body">
+            <p class="markdown-body" id="content">
+            {{src}}
+            </p>
+        </div>
+    </article>
 
     <script>
         document.getElementById('content').innerHTML = marked.parse(document.getElementById('content').innerHTML.replaceAll("â‰¤", "≤")).replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replaceAll("%lft%", "&lt;").replaceAll("%rit%", "&gt;");

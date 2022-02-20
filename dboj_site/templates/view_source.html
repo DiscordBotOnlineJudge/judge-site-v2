@@ -2,12 +2,16 @@
 {% block content %}   
     <legend class="border-bottom mb-4">Source code for <a href="/viewproblem/{{sub_problem}}">{{sub_problem}}</a> by {{author}} in {{lang}}</legend>
 
-    <code style="color:#3b48ff" id="source">
-    {{src}}
-    </code>
+    <article class="card md-3">
+        <div class="card-body">
+            <code style="color:#3b48ff" id="source">
+            {{src}}
+            </code>
+        </div>
+    </article>
 
     <script>
-        document.getElementById("source").innerHTML = document.getElementById("source").innerText.replaceAll("%nl%", "<br>").replaceAll("%sp%", "&emsp;")
+        document.getElementById("source").innerHTML = document.getElementById("source").innerText.replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("%nl%", "<br>").replaceAll("\t", "&emsp;&emsp;&emsp;").replaceAll("%sp%", "&nbsp;");
     </script>
 
 {% endblock content %}

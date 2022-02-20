@@ -6,56 +6,70 @@
         width: 100%;
     }
 
-    td, th {
+    td {
         border: 1px solid #dddddd;
         text-align: left;
         padding: 8px;
         font-weight:normal;
     }
 
-    tr:nth-child(1) {
+    th {
         background-color: #dddddd;
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        font-weight:500;
     }
 </style>
 
-{% if contest %}
-<h2>Problems in contest <code>{{contest}}</code></h2>
-{% else %}
-<h2>Problems</h2>
-{% endif %}
+<article class="card mb-5">
+    <div class="card-body">
+        {% if contest %}
+        <h2>Problems in contest <code>{{contest}}</code></h2>
+        {% else %}
+        <h2>Problems</h2>
+        {% endif %}
 
-<table>
-    {% if contest %}
-        <tr>
-            <td>Problem name</td>
-            <td>&#10003;</td>
-        </tr>
-        {% for problem in problems %}
-        <tr>
-            <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
-            {% if problem[1] %}
-            <th style="color:green; font-weight:bold">Solved</th>
+        <table>
+            {% if contest %}
+                <thead>
+                    <tr>
+                        <td>Problem name</td>
+                        <td>&#10003;</td>
+                    </tr>
+                </thead>
+                {% for problem in problems %}
+                <tr>
+                    <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+                    {% if problem[1] %}
+                    <th style="color:green; font-weight:bold">Solved</th>
+                    {% else %}
+                    <th style="color:gray; font-weight:normal">Not solved yet</th>
+                    {% endif %}
+                </tr>
+                {% endfor %}
             {% else %}
-            <th style="color:gray; font-weight:normal">Not solved yet</th>
+                <thead>
+                <tr>
+                    <th>Problem name</th>
+                    <th>Points</th>
+                    <th>Problem types</th>
+                    <th>Authors/Testers</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for problem in problems %}
+                <tr>
+                    <td><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></td>
+                    <td>{{problem[1]}}</td>
+                    <td>{{problem[2]}}</td>
+                    <td>{{problem[3]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             {% endif %}
-        </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td>Problem name</td>
-            <td>Points</td>
-            <td>Problem types</td>
-            <td>Authors/Testers</td>
-        </tr>
-        {% for problem in problems %}
-        <tr>
-            <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
-            <th>{{problem[1]}}</th>
-            <th>{{problem[2]}}</th>
-            <th>{{problem[3]}}</th>
-        </tr>
-        {% endfor %}
-    {% endif %}
-</table>
+        </table>
+    </div>
+</article>
 
 {% endblock content %}
