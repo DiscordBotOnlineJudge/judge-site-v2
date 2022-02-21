@@ -1,5 +1,5 @@
 import grpc, time
-from dboj_site import turbo, app, settings
+from dboj_site import app, settings
 import dboj_site.contests as contests
 import dboj_site.judge_pb2_grpc as judge_pb2_grpc
 import dboj_site.judge_pb2 as judge_pb2
