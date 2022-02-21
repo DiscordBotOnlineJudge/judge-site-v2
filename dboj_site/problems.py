@@ -1,7 +1,7 @@
 import os, sys, yaml
 import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
-from dboj_site import app, settings, extras, bucket, turbo
+from dboj_site import app, settings, extras, bucket
 from dboj_site import problem_uploading as problem_uploading
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
