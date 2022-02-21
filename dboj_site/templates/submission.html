@@ -2,12 +2,6 @@
 {% block content %} 
     <legend class="border-bottom mb-4">Execution Results</legend>
 
-    {% if not finished %}
-    <p>
-        <a href="{{ url_for('submission', sub_id=sub_id) }}">Reload</a> the page to see latest submission status
-    </p>
-    {% endif %}
-
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style type="text/css">
         <!--
@@ -17,18 +11,30 @@
 
     <article class="card md-3">
         <div class="card-body">
-            {% if output %}
-                <p class="markdown-body" class="tab" id="content" style="font-family:monospace; font-size:16px">
-                {{output}}
-                </p>
-            {% else %}
-            <strong>Waiting for response from a judging server...</strong>
-            {% endif %}
-        </div>
+            <p class="markdown-body" id="result_content" class="tab" style="font-family:monospace; font-size:16px"></p>
+        </div>    
     </article>
 
     <script>
-        document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replaceAll("%nl%", "<br>").replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;");
+        var x = setInterval(function() {
+            const Http = new XMLHttpRequest();
+            const url='https://dboj.jimmyliu.dev/raw_submission/{{sub_id}}';
+            Http.open("GET", url);
+            Http.send();
+
+            Http.onreadystatechange = (e) => {
+                var response = Http.responseText;
+                if (response.length == 0) {
+                    document.getElementById('result_content').innerHTML = "<strong>Waiting for a response from a judging server...</strong>";
+                }
+                else {
+                    document.getElementById('result_content').innerHTML = Http.responseText.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll("%nl%", "<br>");
+                }
+                if (response.endsWith("(Status: COMPLETED)")) {
+                    clearInterval(x);
+                }
+            }
+        }, 1000);
     </script>
 
 {% endblock content %}

@@ -155,8 +155,8 @@ def submission(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('submission.html', title="Submission " + str(sub_id), sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%"))
-
+    return render_template('submission.html', title="Submission " + str(sub_id), sub_problem=sub['problem'], sub_id=sub_id)
+    
 @app.route("/viewproblem/<string:problemName>/submissions/<string:user>")
 def submission_page(problemName, user):
     return render_template('submission-page.html', title="Submissions for " + problemName + " by " + user, problemName = problemName, user = user)
