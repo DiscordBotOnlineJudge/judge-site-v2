@@ -11,7 +11,9 @@
 
     <article class="card md-3">
         <div class="card-body">
-            <p class="markdown-body" id="result_content" class="tab" style="font-family:monospace; font-size:16px"></p>
+            <p class="markdown-body" id="result_content" class="tab" style="font-family:monospace; font-size:16px">
+                <strong>Waiting for a response from a judging server...</strong>
+            </p>
         </div>    
     </article>
 
@@ -24,10 +26,7 @@
 
             Http.onreadystatechange = (e) => {
                 var response = Http.responseText;
-                if (response.length == 0) {
-                    document.getElementById('result_content').innerHTML = "<strong>Waiting for a response from a judging server...</strong>";
-                }
-                else {
+                if (response.length > 0) {
                     document.getElementById('result_content').innerHTML = Http.responseText.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll("%nl%", "<br>");
                 }
                 if (response.endsWith("(Status: COMPLETED)")) {
