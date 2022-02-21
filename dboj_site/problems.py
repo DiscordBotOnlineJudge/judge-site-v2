@@ -1,6 +1,6 @@
 import os, sys, yaml
 import secrets
-from flask import render_template, send_from_directory, send_file, url_for, flash, redirect, request, abort
+from flask import render_template, make_response, send_from_directory, send_file, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras, bucket
 from dboj_site import problem_uploading as problem_uploading
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
@@ -142,14 +142,10 @@ def resubmit():
 @app.route("/raw_submission/<int:sub_id>")
 def raw_submission(sub_id):
     sub = settings.find_one({"type":"submission", "id":sub_id})
-    """fileName = f"dboj_site/static/raw_submission/{sub_id}.txt"
-    if not os.path.isdir('dboj_site/static/raw_submission'): os.mkdir("dboj_site/static/raw_submission")
-    with open(fileName, "w") as f:
-        output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%")
-        f.write(output)
-    return send_from_directory("static", f"raw_submission/{sub_id}.txt", as_attachment=True)"""
     output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%")
-    return output
+    response = make_response(output)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route("/submission/<int:sub_id>")
 @login_required
