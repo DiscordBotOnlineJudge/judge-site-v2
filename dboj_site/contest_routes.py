@@ -76,10 +76,3 @@ def submit_contest():
     if form.validate_on_submit():
         pass
 
-@app.context_processor
-def inject_contest_time():
-    contest = get_contest()
-    if not contest:
-        return dict(t = None)
-    else:
-        return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], ctst = contest['mode'])

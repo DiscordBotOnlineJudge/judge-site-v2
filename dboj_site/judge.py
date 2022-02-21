@@ -1,13 +1,18 @@
-import grpc
+import grpc, time
+from dboj_site import turbo, app, settings
 import dboj_site.contests as contests
 import dboj_site.judge_pb2_grpc as judge_pb2_grpc
 import dboj_site.judge_pb2 as judge_pb2
-from functools import cmp_to_key
+from functools import cmp_to_key, partial
+from flask import render_template
+from threading import Thread
+
 
 def runSubmission(judges, username, cleaned, lang, problm, attachments, return_dict, sub_id):
     with grpc.insecure_channel(judges['ip'] + ":" + str(judges['port'])) as channel:
         stub = judge_pb2_grpc.JudgeServiceStub(channel)
         response = stub.judge(judge_pb2.SubmissionRequest(username = username, source = cleaned, lang = lang, problem = problm, attachment = attachments, sub_id = sub_id))
+
 
 def amt(len):
     h = len // 3600

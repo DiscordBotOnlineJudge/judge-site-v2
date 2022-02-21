@@ -33,3 +33,14 @@ def cmpPost(a, b):
 def home():
     posts = sorted([x for x in settings.find({"type":"post"})], key = cmp_to_key(cmpPost))
     return render_template('home.html', title="Home", posts=posts)
+
+@app.context_processor
+def inject_contest_time():
+    try:
+        contest = get_contest()
+        if not contest:
+            return dict(t = None)
+        else:
+            return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], ctst = contest['mode'])
+    except:
+        return {}

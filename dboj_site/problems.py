@@ -1,7 +1,7 @@
 import os, sys, yaml
 import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
-from dboj_site import app, settings, extras, bucket
+from dboj_site import app, settings, extras, bucket, turbo
 from dboj_site import problem_uploading as problem_uploading
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
@@ -138,6 +138,27 @@ def resubmit():
     return render_template('submit.html', title='Submit to ' + problemName,
                         form=form, legend='Submit to ' + problemName, user = current_user, sub_problem=problemName)"""
     
+
+def live_update(sub_id):
+    with app.app_context():
+        cnt = 4
+        while cnt >= 0:
+            print("Updating", sub_id, ",", cnt, "remaining...")
+            sub = settings.find_one({"type":"submission", "id":sub_id})
+            turbo.push(turbo.replace(render_template("submission_results_update.html", title="Submission " + str(sub_id), sub_problem=sub['problem'], finished="COMPLETED" in sub['output'], sub_id=sub_id, output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%")), "load"))
+            print("Updated")
+            time.sleep(5)
+            cnt -= 1
+
+@app.route("/raw_submission/<int:sub_id>")
+def raw_submission(sub_id):
+    sub = settings.find_one({"type":"submission", "id":sub_id})
+    fileName = f"dboj_site/static/raw_submission/{sub_id}.txt"
+    if not os.path.isdir('dboj_site/static/raw_submission'): os.mkdir("dboj_site/static/raw_submission")
+    with open(fileName, "w") as f:
+        output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%")
+        f.write(output)
+    return render_template("raw_submission_data.html", raw_data_file = f"/static/raw_submission/{sub_id}.txt")
 
 @app.route("/submission/<int:sub_id>")
 @login_required
