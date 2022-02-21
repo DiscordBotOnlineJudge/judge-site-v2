@@ -31,6 +31,7 @@
                 }
                 else {
                     document.getElementById('result_content').innerHTML = Http.responseText.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll("%nl%", "<br>");
+                    window.scrollTo(0,document.body.scrollHeight);
                 }
                 if (response.endsWith("(Status: COMPLETED)")) {
                     clearInterval(x);
