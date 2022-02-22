@@ -189,13 +189,13 @@ def upload_file():
 
     if is_busy():
         flash("An upload is in progress. Please try again in a few seconds.", "danger")
-        return redirect(url_for('export'))
+        return redirect("/problems/export")
     settings.update_one({"type":"busy"}, {"$set":{"busy":True}})
     if uploaded_file.filename != '':
         if not uploaded_file.filename.endswith(".zip"):
             flash("Error: the uploaded file does not have a .zip extention", "danger")
             settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
-            return redirect(url_for('export'))
+            return redirect("/problems/export")
         os.system("rm data.zip; rm -r problemdata")
         uploaded_file.save("data.zip")
         try:
@@ -208,11 +208,11 @@ def upload_file():
             print(e)
             flash("An error occurred: " + str(e), "danger")
             settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
-            return redirect(url_for("export"))
+            return redirect("/problems/export")
     else:
         flash("No file was selected", "danger")
         settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
-        return redirect("/export")
+        return redirect("/problems/export")
     print("Done")
     settings.update_one({"type":"busy"}, {"$set":{"busy":False}})
-    return redirect(url_for('home'))
+    return redirect("/problems/export")
