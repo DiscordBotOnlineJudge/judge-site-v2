@@ -34,17 +34,17 @@
             {% if contest %}
                 <thead>
                     <tr>
-                        <td>Problem name</td>
-                        <td>&#10003;</td>
+                        <th>Problem name</th>
+                        <th>&#10003;</th>
                     </tr>
                 </thead>
                 {% for problem in problems %}
                 <tr>
-                    <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+                    <td><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></td>
                     {% if problem[1] %}
-                    <th style="color:green; font-weight:bold">Solved</th>
+                    <td style="color:green; font-weight:bold">Solved</td>
                     {% else %}
-                    <th style="color:gray; font-weight:normal">Not solved yet</th>
+                    <td style="color:gray; font-weight:normal">Not solved yet</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
