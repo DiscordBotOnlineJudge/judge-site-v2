@@ -41,7 +41,7 @@ def date(a, b, c):
     if not (greater_equal(u, x, 0)):
         raise Exception("This contest has not started yet.")
     elif not (greater_equal(y, u, 0)):
-        raise Exception("This contest has already ended.")
+        raise Exception("Contest is over.")
 
 def compare(t1, t2):
     a = list(map(int, t1.split()))
