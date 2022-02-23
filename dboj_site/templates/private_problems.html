@@ -18,25 +18,29 @@
     }
 </style>
 
-<legend class="border-bottom mb-4">Private problems visible to <code>{{current_user.name}}</code></legend>
-<table>
-    <tr>
-        <td>Problem name</td>
-        <td>Points</td>
-        <td>Contest</td>
-        <td>Problem types</td>
-        <td>Authors/Testers</td>
-    </tr>
+<article class="card mb-5">
+    <div class="card-body">
+        <legend class="border-bottom mb-4">Private problems visible to <code>{{current_user.name}}</code></legend>
+        <table>
+            <tr>
+                <td>Problem name</td>
+                <td>Points</td>
+                <td>Contest</td>
+                <td>Problem types</td>
+                <td>Authors/Testers</td>
+            </tr>
 
-    {% for problem in private_problems %}
-    <tr>
-        <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
-        <th>{{problem[1]}}</th>
-        <th>{{problem[2]}}</th>
-        <th>{{problem[3]}}</th>
-        <th>{{problem[4]}}</th>
-    </tr>
-    {% endfor %}
-</table>
+            {% for problem in private_problems %}
+            <tr>
+                <th><a href="/viewproblem/{{problem[0]}}">{{problem[0]}}</a></th>
+                <th>{{problem[1]}}</th>
+                <th>{{problem[2]}}</th>
+                <th>{{problem[3]}}</th>
+                <th>{{problem[4]}}</th>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</article>
 
 {% endblock content %}
