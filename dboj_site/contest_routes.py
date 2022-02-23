@@ -39,10 +39,18 @@ def view_contests():
 
 @app.route("/contest/<string:contestName>")
 def contest_page(contestName):
-    if not settings.find_one({"type":"contest", "name":contestName}):
+    contest = settings.find_one({"type":"contest", "name":contestName})
+    if not contest:
         abort(404)
+
+    inactive = ""
+    try:
+        date(contest['start'], contest['end'], current_time())
+    except Exception as e:
+        inactive = str(e)
+
     bucket.blob("ContestInstructions/" + contestName + ".txt").download_to_filename("instructions.txt")
-    return render_template('view_contest.html', title="Contest " + contestName, join_contest = True, contestName=contestName, src = open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
+    return render_template('view_contest.html', title="Contest " + contestName, join_contest = True, contestName=contestName, inactive=inactive, src = open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
 
 @app.route("/contest/<string:contestName>", methods=['POST'])
 @login_required
