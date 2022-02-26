@@ -218,19 +218,19 @@
                                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                                 
-                                if (distance < 5) {
-                                clearInterval(x);
-                                document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
-                                location.reload();
+                                if (distance < 5000) {
+                                    document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
+                                    location.reload();
+                                    clearInterval(x);
                                 }
                                 else if (distance < 0) {
-                                document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
+                                    document.getElementById("timer").innerHTML = "Time's Up! Your window on contest <b>{{ctst}}</b> has ended.";
                                 }
                                 else {
                                     done = false;
                                     var dayMsg = "";
                                     if (days > 0) {
-                                    dayMsg = " " + days + " days, ";
+                                        dayMsg = " " + days + " days, ";
                                     }
                                     document.getElementById("timer").innerHTML = "You have <b>" + dayMsg + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds</b> left on contest <b>{{ctst}}</b>.";
                                 }
