@@ -12,22 +12,21 @@
         padding: 8px;
         font-weight:normal;
     }
-
-    tr:nth-child(1) {
-        background-color: #dddddd;
-    }
 </style>
 
 <article class="card md-3" style="min-width:fit-content;">
+    <div class="card-header">
+        <h4 class="card-title">Ongoing Contests</h4>
+    </div>
     <div class="card-body">
-        <legend class="border-bottom mb-4" style="font-size: 30px; font-weight:bold">Contests</code></legend>
-        <legend class="border-bottom mb-4">Ongoing Contests</code></legend>
         <table>
-            <tr>
-                <td><strong>Contest</strong></td>
-                <td><strong>Start</strong></td>
-                <td><strong>End</strong></td>
-            </tr>
+            <thead>
+                <tr class="table-header">
+                    <td><strong>Contest</strong></td>
+                    <td><strong>Start</strong></td>
+                    <td><strong>End</strong></td>
+                </tr>
+            </thead>
 
             {% for contest in contests %}
             {% if contest['color'] == 'lightgreen' %}
@@ -39,12 +38,18 @@
             {% endif %}
             {% endfor %}
         </table>
+    </div>
+</article>
 
-        <br>
+<br>
 
-        <legend class="border-bottom mb-4">Upcoming Contests</code></legend>
+<article class="card md-3" style="min-width:fit-content;">
+    <div class="card-header">
+        <h4 class="card-title">Upcoming Contests</h4>
+    </div>
+    <div class="card-body">
         <table>
-            <tr>
+            <tr class="table-header">
                 <td><strong>Contest</strong></td>
                 <td><strong>Start</strong></td>
                 <td><strong>End</strong></td>
@@ -60,12 +65,18 @@
             {% endif %}
             {% endfor %}
         </table>
+    </div>
+</article>
 
-        <br>
+<br>
 
-        <legend class="border-bottom mb-4">Past Contests</code></legend>
+<article class="card md-3" style="min-width:fit-content;">
+    <div class="card-header">
+        <h4 class="card-title">Past Contests</h4>
+    </div>
+    <div class="card-body">
         <table>
-            <tr>
+            <tr class="table-header">
                 <td><strong>Contest</strong></td>
                 <td><strong>Start</strong></td>
                 <td><strong>End</strong></td>
