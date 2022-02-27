@@ -14,22 +14,22 @@
     }
 
     th {
+        background-color: #dddddd;
         border: 1px solid #dddddd;
         text-align: left;
         padding: 8px;
-        font-weight:700;
+        font-weight:500;
     }
 </style>
 
 <article class="card mb-5" style="min-width:fit-content">
-    <div class="card-header">
-        {% if contest %}
-        <legend style="font-size: 30px; font-weight:bold">Problems in contest <code>{{contest}}</code></legend>
-        {% else %}
-        <legend style="font-size: 30px; font-weight:bold">Problems</legend>
-        {% endif %}
-    </div>
     <div class="card-body">
+        {% if contest %}
+        <legend class="border-bottom mb-4" style="font-size: 30px; font-weight:bold">Problems in contest <code>{{contest}}</code></legend>
+        {% else %}
+        <legend class="border-bottom mb-4" style="font-size: 30px; font-weight:bold">Problems</legend>
+        {% endif %}
+
         <table>
             {% if contest %}
                 <thead>
@@ -50,7 +50,7 @@
                 {% endfor %}
             {% else %}
                 <thead>
-                <tr class="table-header">
+                <tr>
                     <th>Problem name</th>
                     <th>Points</th>
                     <th>Problem types</th>
