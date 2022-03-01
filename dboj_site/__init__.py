@@ -8,7 +8,7 @@ from google.cloud import storage
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '9791627cffb23ce1d67adcde28dbf2e6'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['MAX_CONTENT_LENGTH'] = 469762048
 app._static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 #app.config['SERVER_NAME'] = "127.0.0.1"
