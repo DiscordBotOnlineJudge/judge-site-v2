@@ -32,7 +32,13 @@ def contest_problems(problems):
             contest = x['mode']
     if not contest:
         return None
-    solved = settings.find_one({"type":"profile", "name":current_user.name})['solved']
+
+    solved = []
+    try:
+        solved = settings.find_one({"type":"profile", "name":current_user.name})['solved']
+    except:
+        pass
+
     for problem in settings.find({"type":"problem", "contest":contest}):
         if not perms(problem, current_user.name):
             problems.append((problem['name'], problem['name'] in solved, problem['points'], ", ".join(problem['types']), ", ".join(problem['authors'])))
