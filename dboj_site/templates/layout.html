@@ -137,7 +137,7 @@
                                 <span>&emsp;{{specific_lang}}: {{resources['time-limit'][specific_lang]}} seconds</span><br>
                             {% endif %}
                         {% endfor %}
-                        <span><strong>&#9870;&ensp;Memory limit: </strong>{{resources['memory-limit']['general'] / 1024}} MB</span>
+                        <span><strong>&#9870;&ensp;Memory limit: </strong>{{resources['memory-limit']['general'] / 1024}} MB</span><br>
                         {% for specific_lang in resources['memory-limit'] %}
                             {% if specific_lang != 'general' %}
                                 <span>&emsp;{{specific_lang}}: {{resources['memory-limit'][specific_lang] / 1024}} MB</span><br>
