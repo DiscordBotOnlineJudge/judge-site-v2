@@ -11,16 +11,16 @@
 
     <article class="card md-3">
         <div class="card-body">
-            <p class="markdown-body" id="result_content" class="tab" style="font-family:monospace; font-size:16px">
+            <p class="markdown-body" id="result_content" style="font-family:monospace; font-size:16px">
                 <strong>Loading submission results...</strong>
             </p>
         </div>    
     </article>
 
     <script>
+        const Http = new XMLHttpRequest();
+        const url='https://dboj.jimmyliu.dev/raw_submission/{{sub_id}}';
         var live_submission_updater = setInterval(function() {
-            const Http = new XMLHttpRequest();
-            const url='https://dboj.jimmyliu.dev/raw_submission/{{sub_id}}';
             Http.open("GET", url);
             Http.send();
 
@@ -30,7 +30,7 @@
                     document.getElementById('result_content').innerHTML = "<strong>Waiting for a response from a judging server...</strong>";
                 }
                 else {
-                    document.getElementById('result_content').innerHTML = response.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll("%nl%", "<br>");
+                    document.getElementById('result_content').innerHTML = response.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll(" ", "&ensp;").replaceAll("%nl%", "<br>");
                     window.scrollTo(0,document.body.scrollHeight);
                 }
                 if (response.endsWith("(Status: COMPLETED)")) {
