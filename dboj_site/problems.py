@@ -150,7 +150,7 @@ def raw_submission(sub_id):
     sub = settings.find_one({"type":"submission", "id":sub_id})
     if not sub:
         abort(404)
-    output = sub['output'].strip().replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace("\n", "%nl%")
+    output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").strip().replace("\n", "%nl%")
     response = make_response(output)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
