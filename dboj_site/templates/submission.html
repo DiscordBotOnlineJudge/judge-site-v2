@@ -33,7 +33,7 @@
                     document.getElementById('result_content').innerHTML = response.replaceAll("%sp%", "&ensp;").replaceAll("EXECUTION RESULTS", "").replaceAll("%nl%", "<br>");
                     window.scrollTo(0,document.body.scrollHeight);
                 }
-                if (response.endsWith("(Status: COMPLETED)")) {
+                if (response.endsWith("(Status:%sp%COMPLETED)")) {
                     clearInterval(live_submission_updater);
                 }
             }
