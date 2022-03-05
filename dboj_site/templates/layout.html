@@ -150,13 +150,13 @@
                             <h3>{{side_title}}</h3>
                             <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong> &#8592; Back to {{sub_problem}}</strong></a>
                             {% if sub_id %}
-                                <br><br>
+                                <hr>
                                 <a href="/submission/{{sub_id}}/source">View source</a>
                             {% elif sid %}
                                 <hr>
-                                <a href="/submission/{{sid}}"> &#8592;&ensp;View status</a>
+                                <a href="/submission/{{sid}}/source/raw">&rarr;&ensp;View raw source</a>
                                 <br>
-                                <a href="/submission/{{sid}}/source/raw">&rarr;&ensp;View raw source</a><br>
+                                <a href="/submission/{{sid}}"> &#8592;&ensp;View status</a>
                             {% endif %}
                         </div>
                     {% elif problems and not contest %}
