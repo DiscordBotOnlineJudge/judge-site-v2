@@ -153,8 +153,10 @@
                                 <br><br>
                                 <a href="/submission/{{sub_id}}/source">View source</a>
                             {% elif sid %}
-                                <br><br>
-                                <a href="/submission/{{sid}}"> &#8592; View status</a>
+                                <hr>
+                                <a href="/submission/{{sid}}"> &#8592;&ensp;View status</a>
+                                <br>
+                                <a href="/submission/{{sid}}/source/raw">&rarr;&ensp;View raw source</a><br>
                             {% endif %}
                         </div>
                     {% elif problems and not contest %}
