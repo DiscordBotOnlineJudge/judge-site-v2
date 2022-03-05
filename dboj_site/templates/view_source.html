@@ -17,7 +17,7 @@
     </article>
 
     <script>
-        document.getElementById("source").innerHTML = document.getElementById("source").innerText.replaceAll("\t", "&emsp;&emsp;").replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("%nl%", "<br>").replaceAll("\t", "&emsp;&emsp;&emsp;").replaceAll("%sp%", "&nbsp;");
+        document.getElementById("source").innerHTML = "{{src}}".innerText.replaceAll("\t", "&emsp;&emsp;").replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("%nl%", "<br>").replaceAll("\t", "&emsp;&emsp;&emsp;").replaceAll("%sp%", "&nbsp;");
     </script>
 
 {% endblock content %}
