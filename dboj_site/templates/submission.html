@@ -30,7 +30,7 @@
                     document.getElementById('result_content').innerHTML = "<strong>Waiting for a response from a judging server...</strong>";
                 }
                 else {
-                    document.getElementById('result_content').innerHTML = response.replaceAll("      ", "&emsp;&emsp;&emsp;&emsp;").replace("EXECUTION RESULTS", "").replaceAll("  ", "&emsp;").replaceAll(" ", "&ensp;").replaceAll("%nl%", "<br>");
+                    document.getElementById('result_content').innerHTML = response.replaceAll("%sp%", "&ensp;").replaceAll("EXECUTION RESULTS", "").replaceAll("%nl%", "<br>");
                     window.scrollTo(0,document.body.scrollHeight);
                 }
                 if (response.endsWith("(Status: COMPLETED)")) {
