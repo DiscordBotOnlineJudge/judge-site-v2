@@ -178,7 +178,7 @@ def view_source(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('view_source.html', title="View source from " + str(sub_id), sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace("\t", "    ").replace(" ", "%sp%"), author=sub['author'])
+    return render_template('view_source.html', title="View source from " + str(sub_id), sub_problem=sub['problem'], lang=sub['lang'], sid=sub_id, src=sub['message'].replace("\n", "%nl%").replace("\t", "%sp%%sp%%sp%%sp%").replace(" ", "%sp%"), author=sub['author'])
 
 @app.route('/problems/export')
 @login_required
