@@ -146,10 +146,13 @@ def resubmit():
     
 
 @app.route("/raw_submission/<int:sub_id>")
+@login_required
 def raw_submission(sub_id):
     sub = settings.find_one({"type":"submission", "id":sub_id})
     if not sub:
         abort(404)
+    elif sub['author'] != current_user.name:
+        abort(403)
     output = sub['output'].replace("diff", "").replace("`", "").replace("+ ", "  ").replace("- ", "  ").replace(" ", "%sp%").strip().replace("\n", "%nl%")
     response = make_response(output)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -187,7 +190,9 @@ def raw_source(sub_id):
         abort(404)
     elif sub['author'] != current_user.name:
         abort(403)
-    return render_template('raw_source.html', title="Raw source from " + str(sub_id), src = sub['message'].strip())
+    with open("dboj_site/static/raw_source.txt", "w") as f:
+        f.write(sub['message'].strip().replace("\n\n", "\n"))
+    return send_from_directory('static', 'raw_source.txt')#, title="Raw source from " + str(sub_id), src = sub['message'].strip())
 
 @app.route('/problems/export')
 @login_required

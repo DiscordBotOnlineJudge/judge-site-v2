@@ -20,7 +20,7 @@
     <script>
         var live_submission_updater = setInterval(function() {
             const Http = new XMLHttpRequest();
-            const url='https://dboj.jimmyliu.dev/raw_submission/{{sub_id}}';
+            const url='/raw_submission/{{sub_id}}';
             Http.open("GET", url);
             Http.send();
 
