@@ -4,7 +4,7 @@ from dboj_site import problem_uploading
 from google.cloud import storage
 from flask import render_template, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras, bucket
-from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
+from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm, ContestForm
 from dboj_site.models import User
 from dboj_site.judge import *
 from dboj_site.contests import *
@@ -75,12 +75,64 @@ def get_contest():
 @app.route("/contests/new")
 @login_required
 def set_contest():
-    return render_template('set_contest.html')
+    if not current_user.is_admin:
+        abort(403)
+    form = ContestForm()
+    return render_template('set_contest.html', form = form)
 
-@app.route("/contests/new", methods = ['POST'])
+@app.route("/contests/new", methods = ['GET', 'POST'])
 @login_required
 def submit_contest():
+    if not current_user.is_admin:
+        abort(403)
     form = ContestForm()
     if form.validate_on_submit():
-        pass
+        if not settings.find_one({"type":"contest", "name":form.name.data}) is None:
+            flash("Error: A contest with this code already exists.", "danger")
+            return redirect("/contests/new")
 
+        inst = form.inst.data
+        with open("instructions.txt", "w") as f:
+            f.write(inst)
+            f.flush()
+            f.close()
+
+        stc = storage.Client()
+        blob = stc.bucket("discord-bot-oj-file-storage").blob("ContestInstructions/" + form.name.data + ".txt")
+        blob.upload_from_filename("instructions.txt")
+        settings.insert_one({"type":"contest", "name":form.name.data, "start":form.start.data, "end":form.end.data, "problems":form.problems.data, "len":form.len.data, "has-penalty":form.type.data=='Submission Penalty', "has-time-bonus":form.type.data=='Time Bonus'})
+        flash(f"Successfully created contest {form.name.data}", "success")
+    return redirect("/contests/new")
+        
+"""
+@app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
+@login_required
+def submit(problemName):
+    problem = settings.find_one({"type":"problem", "name":problemName})
+    if problem is None:
+        abort(404)
+    elif (not problem['published'] and (not current_user.is_authenticated or current_user.is_anonymous or (perms(problem, current_user.name)))):
+        abort(403)
+
+    form = SubmitForm()
+    if form.validate_on_submit():
+        sub_cnt = settings.find_one({"type":"sub_cnt"})['cnt']
+        settings.update_one({"type":"sub_cnt"}, {"$inc":{"cnt":1}})
+        
+        lang = form.lang.data
+        src = form.src.data
+        settings.insert_one({"type":"submission", "problem":problemName, "author":current_user.name, "lang":lang, "message":src, "id":sub_cnt, "output":""})        
+
+        judges = settings.find_one({"type":"judge", "status":0})
+        if judges is None:
+            flash("All of the judge's grading servers are currently offline or in use. Please resubmit in a few seconds.", "danger")
+            return redirect("/viewproblem/" + problemName + "/submit")
+
+        manager = Manager()
+        return_dict = manager.dict()
+        rpc = Process(target = runSubmission, args = (judges, current_user.name, src, lang, problemName, False, return_dict, sub_cnt,))
+        rpc.start()
+
+        return redirect('/submission/' + str(sub_cnt))
+    return render_template('submit.html', title='Submit to ' + problemName,
+                        form=form, pn = problemName, user = current_user, sub_problem=problemName)"""

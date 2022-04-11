@@ -4,10 +4,10 @@ statement.md
 test.html
 *.pyc
 test2.html
-dboj_site/__pycache__/*
 db.py
 run.py
 script.js
 resources.yaml
 instructions.txt
 deploy.sh
+venv

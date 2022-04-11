@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from flask_codemirror.fields import CodeMirrorField
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, SelectField, SelectMultipleField, RadioField, FloatField, DecimalField, DateField, DateTimeField, TimeField, HiddenField, FieldList, FormField, Form
 from wtforms import *
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from dboj_site.models import User
@@ -45,3 +45,13 @@ class SubmitForm(FlaskForm):
     lang = SelectField('Language', choices = [x['name'] for x in settings.find({"type":"lang"})])
     src = CodeMirrorField('Source code', config={'lineNumbers' : 'true'})
     submit = SubmitField('Submit!')
+
+class ContestForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    start = StringField('Start', validators=[DataRequired()])
+    end = StringField('End', validators=[DataRequired()])
+    problems = IntegerField('Problems', validators=[DataRequired()])
+    len = IntegerField('Length', validators=[DataRequired()])
+    type = SelectField('Type', choices = ["Time Bonus", "Submission Penalty"])
+    inst = CodeMirrorField('Instructions', config={'lineNumbers' : 'true'})
+    submit = SubmitField('Create New Contest')

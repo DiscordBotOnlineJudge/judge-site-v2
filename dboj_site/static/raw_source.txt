@@ -1,0 +1,114 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define ll long long
+#define ull unsigned long long
+#if NOT_DMOJ
+#pragma warning(disable:4996)
+#endif
+char _;
+#define readi(x) do{while((x=getchar())<'0'); for(x-='0'; '0'<=(_=getchar()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+template<typename T>void read(T& s) { s = 0; char ch = getchar(); ll f = 1; while (ch < '0' || ch>'9') { if (ch == '-')f = -1; ch = getchar(); }while (ch >= '0' && ch <= '9')s = (s << 3) + (s << 1) + ch - 48, ch = getchar(); s *= f; }
+template<typename T, typename...A>void read(T& f, A&...a) { read(f); read(a...); }
+#define pi pair<int, int> 
+const int MAXN = 1e5 + 2, MAXS = 317, MAXK = 2e4 + 2, LOG = 17; const ll mod = 1e9 + 7;
+
+int n, q, ptr, sz, blk[MAXS][MAXK], seq[MAXN], c[MAXN]; pi dfn[MAXN];
+vector<int> adj[MAXN];
+
+void dfs(int u) {
+    dfn[u].first = ptr;
+    seq[ptr] = u;
+    ptr++;
+
+    for (int v : adj[u]) {
+        dfs(v);
+    }
+    dfn[u].second = ptr - 1;
+}
+
+void updateFactors(int x, int bi) {
+    for (int i = 1; (ll)i * i <= (ll)x; i++) {
+        if (x % i == 0) {
+            if (i < MAXN) blk[bi][i]++;
+            if (i != x / i && x / i < MAXK) blk[bi][x / i]++;
+        }
+    }
+}
+
+void update(int pos, int val) {
+    int pv = c[pos];
+    for (int i = 1; (ll)i * i <= (ll)pv; i++) {
+        if (pv % i == 0) {
+            if (i < MAXN) blk[(dfn[pos].first - 1) / sz][i]--;
+            if (i != pv / i && pv / i < MAXK) blk[(dfn[pos].first - 1) / sz][pv / i]--;
+        }
+    }
+    pv += val; c[pos] = pv;
+    for (int i = 1; (ll)i * i <= (ll)pv; i++) {
+        if (pv % i == 0) {
+            if (i < MAXN) blk[(dfn[pos].first - 1) / sz][i]++;
+            if (i != pv / i && pv / i < MAXK) blk[(dfn[pos].first - 1) / sz][pv / i]++;
+        }
+    }
+}
+
+int queryRange(int lft, int rit, int k) {
+    int sm = 0;
+    while (lft < rit && (lft - 1) % sz != 0) {
+        if (c[seq[lft]] % k == 0) sm++;
+        lft++;
+    }
+    while (lft + sz <= rit) {
+        sm += blk[(lft - 1) / sz][k];
+        lft += sz;
+    }
+    while (lft <= rit) {
+        if (c[seq[lft]] % k == 0) sm++;
+        lft++;
+    }
+    return sm;
+}
+
+int query(int h, int f) {
+    int ans = queryRange(dfn[h].first, dfn[h].second, f);
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    #if NOT_DMOJ
+    freopen("data.in", "r", stdin);
+    #endif
+
+    read(n, q); sz = (int)sqrt(n);
+    for (int i = 1; i <= n; i++) {
+        int p; read(p);
+        adj[p].push_back(i);
+    }
+    for (int i = 1; i <= n; i++) read(c[i]);
+
+    ptr = 1;
+    dfs(1);
+
+    for (int i = 1, bi = -1; i <= n; i++) {
+        if ((i - 1) % sz == 0) {
+            bi++;
+        }
+        updateFactors(c[seq[i]], bi);
+    }
+
+    for (int i = 1; i <= q; i++) {
+        int cmd, x, v;
+        read(cmd, x, v);
+        if (cmd == 1) {
+            update(x, v);
+        }
+        else {
+            printf("%d\n", query(x, v));
+        }
+    }
+    
+    return 0;
+}
