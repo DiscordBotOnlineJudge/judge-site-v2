@@ -80,7 +80,7 @@ def set_contest():
     form = ContestForm()
     return render_template('set_contest.html', form = form)
 
-@app.route("/contests/new", methods = ['GET', 'POST'])
+@app.route("/contests/new", methods = ['POST'])
 @login_required
 def submit_contest():
     if not current_user.is_admin:
