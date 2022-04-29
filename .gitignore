@@ -11,3 +11,5 @@ resources.yaml
 instructions.txt
 deploy.sh
 venv
+run.py
+.env

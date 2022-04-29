@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
-    <legend class="border-bottom mb-4">Problem Statement for <code>{{problemName}}</code></legend>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <article class="card mb-3">
         <div class="card-body">
+            <legend class="border-bottom mb-4" style="font-size: 30px; font-weight:bold">Problem Statement for <code>{{problemName}}</legend>
+
             <p id="content" class="markdown-body">
             {{src}}
             </p>
