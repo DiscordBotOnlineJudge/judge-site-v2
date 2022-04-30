@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>    
-    <legend class="border-bottom mb-4">Joining Contest <code style="font-size:larger">{{contestName}}</code></legend>
-
+    
     <article class="card md-3">
         <div class="card-body">
+            <legend class="border-bottom mb-4" style="font-size: 30px; font-weight:bold">Joining Contest <code>{{contestName}}</code></legend>
+
             <p id="source" style="font-family:monospace">
             {{src}}
             </p>
