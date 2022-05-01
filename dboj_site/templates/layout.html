@@ -127,75 +127,8 @@
             
             <div class="col-md-4">
                 <div class="sticky-window">
-                    {% if problemName %}
-                    <div class="content-section">
-                        <h3>{{side_title}}</h3>
-                        <a href="/viewproblem/{{problemName}}/submit"><button class="btn btn-primary">Submit Solution</button></a>
-                        <hr style="padding-bottom: 0.3em">
-                        <span><strong>&#128337;&ensp;Time limit: </strong>{{resources['time-limit']['general']}} seconds</span><br>
-                        {% for specific_lang in resources['time-limit'] %}
-                            {% if specific_lang != 'general' %}
-                                <span>&emsp;{{specific_lang}}: {{resources['time-limit'][specific_lang]}} seconds</span><br>
-                            {% endif %}
-                        {% endfor %}
-                        <span><strong>&#9870;&ensp;Memory limit: </strong>{{resources['memory-limit']['general'] / 1024}} MB</span><br>
-                        {% for specific_lang in resources['memory-limit'] %}
-                            {% if specific_lang != 'general' %}
-                                <span>&emsp;{{specific_lang}}: {{resources['memory-limit'][specific_lang] / 1024}} MB</span><br>
-                            {% endif %}
-                        {% endfor %}
-                        <br><br>
-                    </div>
-                    {% elif sub_problem %}
-                        <div class="content-section">
-                            <h3>{{side_title}}</h3>
-                            <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong> &#8592; Back to {{sub_problem}}</strong></a>
-                            {% if sub_id %}
-                                <hr>
-                                <a href="/submission/{{sub_id}}/source">View source</a>
-                            {% elif sid %}
-                                <hr>
-                                <a href="/submission/{{sid}}/source/raw">&rarr;&ensp;View raw source</a>
-                                <br>
-                                <a href="/submission/{{sid}}"> &#8592;&ensp;View status</a>
-                            {% endif %}
-                        </div>
-                    {% elif problems and not contest %}
-                        <div class="content-section">
-                            <h3>{{side_title}}</h3>
-                            <a href="/problems/private"><button class="btn btn-outline-primary">View private problems</button></a>
-                            <hr style="padding-bottom: 0.3em">
-                        </div>
-                    {% elif contestName %}
-                        <div class="content-section">
-                            <a href="/contests" style="font-size:18px"><strong> &#8592; Back to contests</strong></a>
-                        </div>
-                    {% if not current_user.is_authenticated or current_user.is_anonymous %}
-                        <div class="content-section">
-                            <legend class="border-bottom mb-4">Enter contest</legend>
-                            <p style="max-width:fit-content">Please <a href="/login?next=%2Fcontest%2F{{contestName}}">log in</a> to participate</p>
-                        </div>
-                    {% else %}
-                        <div class="content-section">
-                            <legend class="border-bottom mb-4">Enter contest</legend>
-                            {% if inactive %}
-                            <p style="max-width:fit-content">{{inactive}}</p>
-                            {% else %}
-                            <form method="POST" action="" enctype="multipart/form-data" onsubmit="return on_join()" id="join_form">
-                            <button type="submit" class="btn btn-primary" id="submit_button">Join contest</button>
-                            </form>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    {% elif private_problems %}
-                        <div class="content-section">
-                            <a href="/problems" style="font-size:18px"><strong> &#8592; Back to published problems</strong></a>
-                        </div>
-                    {% elif error or specific_post %}
-                        <div class="content-section">
-                            <a href="/home" style="font-size:18px"><strong> &#8592; Back to home</strong></a>
-                        </div>
-                    {% endif %}
+                    {% block sidebar %}
+                    {% endblock %}
                 
                     {% if t %}
                         <div class="content-section">
