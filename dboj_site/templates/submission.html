@@ -41,3 +41,11 @@
     </script>
 
 {% endblock content %}
+
+{% block sidebar %}
+<div class="content-section">
+    <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong> &#8592; Back to {{sub_problem}}</strong></a>
+    <hr>
+    <a href="/submission/{{sub_id}}/source">View source</a>
+</div>
+{% endblock %}

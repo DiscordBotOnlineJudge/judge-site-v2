@@ -17,3 +17,24 @@
     </script>
 
 {% endblock content %}
+
+{% block sidebar %}
+<div class="content-section">
+    <h3>{{side_title}}</h3>
+    <a href="/viewproblem/{{problemName}}/submit"><button class="btn btn-primary">Submit Solution</button></a>
+    <hr style="padding-bottom: 0.3em">
+    <span><strong>&#128337;&ensp;Time limit: </strong>{{resources['time-limit']['general']}} seconds</span><br>
+    {% for specific_lang in resources['time-limit'] %}
+        {% if specific_lang != 'general' %}
+            <span>&emsp;{{specific_lang}}: {{resources['time-limit'][specific_lang]}} seconds</span><br>
+        {% endif %}
+    {% endfor %}
+    <span><strong>&#9870;&ensp;Memory limit: </strong>{{resources['memory-limit']['general'] / 1024}} MB</span><br>
+    {% for specific_lang in resources['memory-limit'] %}
+        {% if specific_lang != 'general' %}
+            <span>&emsp;{{specific_lang}}: {{resources['memory-limit'][specific_lang] / 1024}} MB</span><br>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+</div>
+{% endblock %}

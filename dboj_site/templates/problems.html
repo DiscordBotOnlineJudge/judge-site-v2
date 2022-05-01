@@ -73,3 +73,13 @@
 </article>
 
 {% endblock content %}
+
+{% if not contest %}
+{% block sidebar %}
+<div class="content-section">
+    <h3>{{side_title}}</h3>
+    <a href="/problems/private"><button class="btn btn-outline-primary">View private problems</button></a>
+    <hr style="padding-bottom: 0.3em">
+</div>
+{% endblock %}
+{% endif %}

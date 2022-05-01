@@ -21,3 +21,13 @@
     </script>
 
 {% endblock content %}
+
+{% block sidebar %}
+<div class="content-section">
+    <a href="/viewproblem/{{sub_problem}}" style="font-size:18px"><strong> &#8592; Back to {{sub_problem}}</strong></a>
+    <hr>
+    <a href="/submission/{{sid}}/source/raw">&rarr;&ensp;View raw source</a>
+    <br>
+    <a href="/submission/{{sid}}"> &#8592;&ensp;View status</a>
+</div>
+{% endblock %}
