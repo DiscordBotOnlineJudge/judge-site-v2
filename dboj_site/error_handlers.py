@@ -1,5 +1,6 @@
 import os
 import secrets
+import traceback, requests # Error handling
 from flask import render_template, url_for, flash, redirect, request, abort
 from dboj_site import app, settings, extras
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
@@ -12,6 +13,7 @@ from dboj_site.judge import *
 from dboj_site.extras import *
 from multiprocessing import Process, Manager
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTPException
 md = Markdown(app,
               safe_mode=True,
               output_format='html4',
@@ -25,10 +27,13 @@ def error_occurred(e):
 def page_not_found(e):
     return render_template('404.html', title="404 Not Found", error = True), 404
 
-
-@app.errorhandler(500)
-def error_occurred(e):
-    return render_template('500.html', title="500 Something Went Wrong", error = True), 500
+@app.errorhandler(Exception)
+def handle_exception(e):
+    if "ERRORS_WEBHOOK" in os.environ:
+        requests.post(os.environ['ERRORS_WEBHOOK'], json = {"content":f"{os.environ.get('PING_MESSAGE')}\n**Error occured in the DBOJ Online Judge website:**\n```{traceback.format_exc()}```"})
+    if isinstance(e, HTTPException):
+        return e
+    return render_template("500.html", title="500 Something Went Wrong", e=e), 500
 
 @app.errorhandler(413)
 def file_upload_too_large(e):

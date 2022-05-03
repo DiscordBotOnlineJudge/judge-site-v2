@@ -7,6 +7,10 @@ from pymongo import MongoClient
 from google.cloud import storage
 import os
 
+# import .env environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['MAX_CONTENT_LENGTH'] = 469762048
