@@ -2,7 +2,7 @@ import os, sys
 import secrets
 from dboj_site import problem_uploading
 from google.cloud import storage
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, redirect, request, abort, send_from_directory
 from dboj_site import app, settings, extras, bucket
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
@@ -44,3 +44,7 @@ def inject_contest_time():
             return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], ctst = contest['mode'])
     except:
         return {}
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory("static", "favicon.ico")

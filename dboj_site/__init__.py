@@ -14,8 +14,6 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['MAX_CONTENT_LENGTH'] = 469762048
-app._static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
-#app.config['SERVER_NAME'] = "127.0.0.1"
 
 # Codemirror for Flask
 CODEMIRROR_LANGUAGES = ['python']
