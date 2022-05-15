@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %} 
-    <legend class="border-bottom mb-4">Execution Results</legend>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style type="text/css">
         <!--
@@ -11,6 +10,7 @@
 
     <article class="card md-3">
         <div class="card-body">
+            <legend class="border-bottom mb-4">Execution Results</legend>
             <p class="markdown-body" id="result_content" style="font-family:monospace; font-size:16px">
                 <strong>Loading submission results...</strong>
             </p>
