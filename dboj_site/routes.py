@@ -1,8 +1,9 @@
-import os, sys
+import os
+import sys
 import secrets
 from dboj_site import problem_uploading
 from google.cloud import storage
-from flask import render_template, url_for, flash, redirect, request, abort, send_from_directory
+from flask import render_template, flash, redirect, request, abort, send_from_directory
 from dboj_site import app, settings, extras, bucket
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm
 from dboj_site.models import User
@@ -23,27 +24,32 @@ from werkzeug.utils import secure_filename
 md = Markdown(app,
               safe_mode=True,
               output_format='html4',
-             )
+              )
+
 
 def cmpPost(a, b):
     return (-1 if a['id'] > b['id'] else 1)
 
+
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = sorted([x for x in settings.find({"type":"post"})], key = cmp_to_key(cmpPost))
+    posts = sorted([x for x in settings.find(
+        {"type": "post"})], key=cmp_to_key(cmpPost))
     return render_template('home.html', title="Home", posts=posts)
+
 
 @app.context_processor
 def inject_contest_time():
     try:
         contest = get_contest()
         if not contest:
-            return dict(t = None)
+            return dict(t=None)
         else:
-            return dict(t = contest['start'].split(), len = settings.find_one({"type":"contest", "name":contest['mode']})['len'], ctst = contest['mode'])
+            return dict(t=contest['start'].split(), len=settings.find_one({"type": "contest", "name": contest['mode']})['len'], ctst=contest['mode'])
     except:
         return {}
+
 
 @app.route("/favicon.ico")
 def favicon():

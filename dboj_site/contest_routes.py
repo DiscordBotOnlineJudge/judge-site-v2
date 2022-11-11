@@ -1,8 +1,9 @@
-import os, sys
+import os
+import sys
 import secrets
 from dboj_site import problem_uploading
 from google.cloud import storage
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, flash, redirect, request, abort
 from dboj_site import app, settings, extras, bucket
 from dboj_site.forms import LoginForm, UpdateAccountForm, PostForm, SubmitForm, ContestForm
 from dboj_site.models import User
@@ -20,12 +21,13 @@ from werkzeug.utils import secure_filename
 md = Markdown(app,
               safe_mode=True,
               output_format='html4',
-             )
+              )
+
 
 @app.route("/contests")
 def view_contests():
     contests = []
-    for x in settings.find({"type":"contest"}):
+    for x in settings.find({"type": "contest"}):
         try:
             date(x['start'], x['end'], current_time())
             x['color'] = 'lightgreen'
@@ -37,9 +39,10 @@ def view_contests():
         contests.append(x)
     return render_template('contests.html', title="Contests", contests=contests)
 
+
 @app.route("/contest/<string:contestName>")
 def contest_page(contestName):
-    contest = settings.find_one({"type":"contest", "name":contestName})
+    contest = settings.find_one({"type": "contest", "name": contestName})
     if not contest:
         abort(404)
 
@@ -49,8 +52,10 @@ def contest_page(contestName):
     except Exception as e:
         inactive = str(e)
 
-    bucket.blob("ContestInstructions/" + contestName + ".txt").download_to_filename("instructions.txt")
-    return render_template('view_contest.html', title="Contest " + contestName, join_contest = True, contestName=contestName, inactive=inactive, src = open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
+    bucket.blob("ContestInstructions/" + contestName +
+                ".txt").download_to_filename("instructions.txt")
+    return render_template('view_contest.html', title="Contest " + contestName, join_contest=True, contestName=contestName, inactive=inactive, src=open("instructions.txt", "r").read().replace("\n", "%nl%").replace(" ", "%sp%"))
+
 
 @app.route("/contest/<string:contestName>", methods=['POST'])
 @login_required
@@ -63,14 +68,16 @@ def join_contest(contestName):
         flash(str(e), 'danger')
         return redirect("/contest/" + contestName)
 
+
 def get_contest():
     if not current_user.is_authenticated or current_user.is_anonymous:
         return None
     contest = None
-    for x in settings.find({"type":"access", "name":current_user.name}):
+    for x in settings.find({"type": "access", "name": current_user.name}):
         if x['mode'] != 'admin' and x['mode'] != 'owner' and in_contest(x):
             contest = x
     return contest
+
 
 @app.route("/contests/new")
 @login_required
@@ -78,16 +85,17 @@ def set_contest():
     if not current_user.is_admin:
         abort(403)
     form = ContestForm()
-    return render_template('set_contest.html', form = form)
+    return render_template('set_contest.html', form=form)
 
-@app.route("/contests/new", methods = ['POST'])
+
+@app.route("/contests/new", methods=['POST'])
 @login_required
 def submit_contest():
     if not current_user.is_admin:
         abort(403)
     form = ContestForm()
     if form.validate_on_submit():
-        if not settings.find_one({"type":"contest", "name":form.name.data}) is None:
+        if not settings.find_one({"type": "contest", "name": form.name.data}) is None:
             flash("Error: A contest with this code already exists.", "danger")
             return redirect("/contests/new")
 
@@ -98,12 +106,15 @@ def submit_contest():
             f.close()
 
         stc = storage.Client()
-        blob = stc.bucket("discord-bot-oj-file-storage").blob("ContestInstructions/" + form.name.data + ".txt")
+        blob = stc.bucket(
+            "discord-bot-oj-file-storage").blob("ContestInstructions/" + form.name.data + ".txt")
         blob.upload_from_filename("instructions.txt")
-        settings.insert_one({"type":"contest", "name":form.name.data, "start":form.start.data, "end":form.end.data, "problems":form.problems.data, "len":form.len.data, "has-penalty":form.type.data=='Submission Penalty', "has-time-bonus":form.type.data=='Time Bonus'})
+        settings.insert_one({"type": "contest", "name": form.name.data, "start": form.start.data, "end": form.end.data, "problems": form.problems.data,
+                            "len": form.len.data, "has-penalty": form.type.data == 'Submission Penalty', "has-time-bonus": form.type.data == 'Time Bonus'})
         flash(f"Successfully created contest {form.name.data}", "success")
     return redirect("/contests/new")
-        
+
+
 """
 @app.route("/viewproblem/<string:problemName>/submit", methods=['GET', 'POST'])
 @login_required
